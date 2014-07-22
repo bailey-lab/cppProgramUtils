@@ -7,11 +7,11 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutil/utils.hpp"
-#include "cppprogutil/commandLineArguments.hpp"
-#include "cppprogutil/parameter.hpp"
+#include "cppprogutils/utils.hpp"
+#include "cppprogutils/commandLineArguments.hpp"
+#include "cppprogutils/parameter.hpp"
 
-namespace cppprogutil {
+namespace cppprogutils {
 
 class programSetUp {
 
@@ -36,7 +36,7 @@ class programSetUp {
   parametersHolder pars_;
   std::string programName_;
 
-  void cppcppprogutil(const std::string &fileName, bool overWrite,
+  void cppcppprogutils(const std::string &fileName, bool overWrite,
                            bool failOnWriteFailure);
   // check for valid commands
   void lookForInvalidOptions();
@@ -247,7 +247,7 @@ VecStr programSetUp::processFlag(std::string &flag) {
   return tokenizeString(flag, ",");
 }
 
-void programSetUp::cppcppprogutil(const std::string &fileName,
+void programSetUp::cppcppprogutils(const std::string &fileName,
                                        bool overWrite,
                                        bool failOnWriteFailure) {
   std::ofstream parameterFile;
@@ -278,4 +278,4 @@ void programSetUp::writeOutCommandLineArguments(
   printTableOrganized(content, columnNames, out);
 }
 
-}  // namespace cppprogutil
+}  // namespace cppprogutils

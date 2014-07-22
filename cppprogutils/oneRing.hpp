@@ -7,8 +7,8 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutil/programRunner.hpp"
-namespace cppprogutil {
+#include "cppprogutils/programRunner.hpp"
+namespace cppprogutils {
 
 class oneRing : public programRunner {
 
@@ -96,5 +96,5 @@ void oneRing::listPrograms(std::ostream &out, const std::string &command,
     ring.second.listPrograms(std::cout, "", nameOfProgram);
   }
 }
-} // cppprogutil
+} // cppprogutils
 

@@ -6,8 +6,8 @@
  *      Author: nickhathaway
  */
 
-#include "cppprogutil/common.hpp"
-namespace cppprogutil{
+#include "cppprogutils/common.hpp"
+namespace cppprogutils{
 template <typename NUM>
 std::string to_string(NUM number) {
   std::stringstream tempStream;
@@ -745,4 +745,4 @@ static int32_t needleScore(const std::string& objA, const std::string& objB) {
     return score;
   }
 
-} // cppprogutil
+} // cppprogutils

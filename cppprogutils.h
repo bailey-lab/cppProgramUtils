@@ -7,10 +7,10 @@
  *      Author: nickhathaway
  */
 
-#include "cppprogutil/common.hpp"
-#include "cppprogutil/utils.hpp"
-#include "cppprogutil/commandLineArguments.hpp"
-#include "cppprogutil/oneRing.hpp"
-#include "cppprogutil/parameter.hpp"
-#include "cppprogutil/programRunner.hpp"
-#include "cppprogutil/programSetUp.hpp"
+#include "cppprogutils/common.hpp"
+#include "cppprogutils/utils.hpp"
+#include "cppprogutils/commandLineArguments.hpp"
+#include "cppprogutils/oneRing.hpp"
+#include "cppprogutils/parameter.hpp"
+#include "cppprogutils/programRunner.hpp"
+#include "cppprogutils/programSetUp.hpp"

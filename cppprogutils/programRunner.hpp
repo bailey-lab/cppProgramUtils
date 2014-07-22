@@ -7,9 +7,9 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutil/utils.hpp"
-#include "cppprogutil/programSetUp.hpp"
-namespace cppprogutil {
+#include "cppprogutils/utils.hpp"
+#include "cppprogutils/programSetUp.hpp"
+namespace cppprogutils {
 
 class programRunner {
  protected:
@@ -343,5 +343,5 @@ void programRunner::listPrograms(std::ostream &out, const std::string &command,
   }
   listCommands(out);
 }
-}  // namespace cppprogutil
+}  // namespace cppprogutils
 

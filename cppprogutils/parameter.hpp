@@ -7,8 +7,8 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutil/utils.hpp"
-namespace cppprogutil {
+#include "cppprogutils/utils.hpp"
+namespace cppprogutils {
 
 class parameter {
  public:
@@ -89,5 +89,5 @@ class parametersHolder {
     }
   }
 };
-}  // namespace cppprogutil
+}  // namespace cppprogutils
 
