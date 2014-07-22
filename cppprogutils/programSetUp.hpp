@@ -20,6 +20,10 @@ class programSetUp {
   programSetUp(int argc, char *argv[]);
   programSetUp(const commandLineArguments &inputCommands);
   programSetUp(const MapStrStr &inputCommands);
+
+  virtual ~programSetUp(){
+
+  }
   //members
   // map to hold the commands
   commandLineArguments commands_;
@@ -36,7 +40,7 @@ class programSetUp {
   parametersHolder pars_;
   std::string programName_;
 
-  void cppcppprogutils(const std::string &fileName, bool overWrite,
+  void writeParametersFile(const std::string &fileName, bool overWrite,
                            bool failOnWriteFailure);
   // check for valid commands
   void lookForInvalidOptions();
@@ -247,7 +251,7 @@ VecStr programSetUp::processFlag(std::string &flag) {
   return tokenizeString(flag, ",");
 }
 
-void programSetUp::cppcppprogutils(const std::string &fileName,
+void programSetUp::writeParametersFile(const std::string &fileName,
                                        bool overWrite,
                                        bool failOnWriteFailure) {
   std::ofstream parameterFile;
