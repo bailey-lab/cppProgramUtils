@@ -40,7 +40,7 @@
 #include <functional>
 
 
-namespace progutil {
+namespace cppprogutil {
 
 typedef std::map<std::string, std::string> MapStrStr;
 typedef std::vector<std::string> VecStr;

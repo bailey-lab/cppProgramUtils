@@ -7,8 +7,8 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "progutil/utils.hpp"
-namespace progutil {
+#include "cppprogutil/utils.hpp"
+namespace cppprogutil {
 
 class commandLineArguments {
 
@@ -302,6 +302,6 @@ MapStrStr commandLineArguments::convertCommandLineArguments(int argc, char* argv
   }
   return storage;
 }
-}  // namespace progutil
+}  // namespace cppprogutil
 
 
