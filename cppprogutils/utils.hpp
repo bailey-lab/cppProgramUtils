@@ -7,7 +7,7 @@
  */
 
 #include "cppprogutils/common.hpp"
-namespace cppprogutils{
+namespace cppprogutils {
 template <typename NUM>
 std::string to_string(NUM number) {
   std::stringstream tempStream;
@@ -26,45 +26,44 @@ std::string leftPadNumStr(T num, T highestNumber = 10) {
   ans << num;
   return ans.str();
 }
-std::string convertBoolToString(bool convert) {
+inline std::string convertBoolToString(bool convert) {
   if (convert) {
     return "true";
   } else {
     return "false";
   }
 }
-double roundDecPlaces(double num, int decPlaces) {
+inline double roundDecPlaces(double num, int decPlaces) {
   double rounder = pow(10, decPlaces);
   return (floor(num * rounder + 0.5) / rounder);
 }
 
-
-void stringToUpper(std::string& str) {
+inline void stringToUpper(std::string& str) {
   for (auto& c : str) {
     c = toupper(c);
   }
 }
-void stringToLower(std::string& str) {
+inline void stringToLower(std::string& str) {
   for (auto& c : str) {
     c = tolower(c);
   }
 }
-std::string stringToUpperReturn(std::string str) {
+inline std::string stringToUpperReturn(std::string str) {
   stringToUpper(str);
   return str;
 }
-std::string stringToLowerReturn(std::string str) {
+inline std::string stringToLowerReturn(std::string str) {
   stringToLower(str);
   return str;
 }
 
-void changeStringVectorToLowerCase(VecStr& vec) {
+inline void changeStringVectorToLowerCase(VecStr& vec) {
   for (auto& v : vec) {
     stringToLower(v);
   }
 }
 
-std::string get_cwd() {
+inline std::string get_cwd() {
   // from http://stackoverflow.com/a/2869667
   const size_t chunkSize = 255;
   const int maxChunks =
@@ -109,9 +108,9 @@ std::string vectorToString(const std::vector<T>& vectorToConvert,
   return returnString;
 }
 
-std::vector<std::string> tokenizeString(const std::string& str,
-                                        const std::string& delim,
-                                        bool addEmptyToEnd = false) {
+inline std::vector<std::string> tokenizeString(const std::string& str,
+                                               const std::string& delim,
+                                               bool addEmptyToEnd = false) {
   std::vector<std::string> output;
   if ("whitespace" == delim) {
     std::stringstream tempStream(str);
@@ -144,11 +143,12 @@ std::vector<std::string> tokenizeString(const std::string& str,
   return output;
 }
 
-bool containsSubString(const std::string& str, const std::string& subString) {
+inline bool containsSubString(const std::string& str,
+                              const std::string& subString) {
   return (str.find(subString) != std::string::npos);
 }
 
-bool stringContainsAllDigits(const std::string& str) {
+inline bool stringContainsAllDigits(const std::string& str) {
   for (const auto& c : str) {
     if (!isdigit(c)) {
       return false;
@@ -156,8 +156,8 @@ bool stringContainsAllDigits(const std::string& str) {
   }
   return true;
 }
-std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
-                          int secondsDecimalPlaces) {
+inline std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
+                                 int secondsDecimalPlaces) {
   std::stringstream duration;
   double timeInSeconds = timeInSecondsOriginal;
   if (timeInSeconds > 31536000) {
@@ -244,42 +244,45 @@ std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
   }
   return duration.str();
 }
-std::string centerText(const std::string& text, uint32_t maxWidth) {
+inline std::string centerText(const std::string& text, uint32_t maxWidth) {
   uint32_t halfWay = std::round(maxWidth / 2.0);
   uint32_t halfText = std::round(text.size() / 2.0);
   return std::string(halfWay - halfText, ' ') + text;
 }
 
-std::string boldText(const std::string& title, const std::string& colorCode) {
+inline std::string boldText(const std::string& title,
+                            const std::string& colorCode) {
   return "\033[1;" + colorCode + "m" + title + "\033[0m";
 }
-std::string boldBlackText(const std::string& title) {
+inline std::string boldBlackText(const std::string& title) {
   return boldText(title, "30");
 }
-std::string centerTitle(const std::string& text, uint32_t maxWidth) {
+inline std::string centerTitle(const std::string& text, uint32_t maxWidth) {
   return centerText(boldBlackText(text), maxWidth);
 }
-std::string addFlashingColor(const std::string& colorCode) {
+inline std::string addFlashingColor(const std::string& colorCode) {
   return "\033[38;5;" + colorCode + ";147;5" + "m";
 }
-std::string addFlashingColor(uint32_t colorCode) {
+inline std::string addFlashingColor(uint32_t colorCode) {
   return addFlashingColor(to_string(colorCode));
 }
-std::string addAnsiAtr(const std::string& atr) { return "\033[" + atr + "m"; }
-std::string changeBackground(const std::string& colorCode) {
+inline std::string addAnsiAtr(const std::string& atr) {
+  return "\033[" + atr + "m";
+}
+inline std::string changeBackground(const std::string& colorCode) {
   return "\033[48;5;" + colorCode + "m";
 }
-std::string changeColor(const std::string& colorCode) {
+inline std::string changeColor(const std::string& colorCode) {
   return "\033[38;5;" + colorCode + "m";
 }
-std::string changeColor(uint32_t colorCode) {
+inline std::string changeColor(uint32_t colorCode) {
   return changeColor(to_string(colorCode));
 }
-std::string changeBackground(uint32_t colorCode) {
+inline std::string changeBackground(uint32_t colorCode) {
   return changeBackground(to_string(colorCode));
 }
 
-std::string endAllAttributes(const std::string& add = "") {
+inline std::string endAllAttributes(const std::string& add = "") {
   std::string output = "\033[0m";
   if (add != "") {
     output.append("\033[" + add + "m");
@@ -301,7 +304,7 @@ bool vectorContains(const std::vector<T>& vec, const T& search) {
   return false;
 }
 // check to see if a file exists
-bool fexists(const std::string &filename) {
+inline bool fexists(const std::string& filename) {
   std::ifstream ifile(filename.c_str());
   if (ifile) {
     return true;
@@ -310,8 +313,8 @@ bool fexists(const std::string &filename) {
   }
 }
 
-void openTextFile(std::ofstream &file, std::string filename, bool overWrite,
-                  bool append, bool exitOnFailure) {
+inline void openTextFile(std::ofstream& file, std::string filename,
+                         bool overWrite, bool append, bool exitOnFailure) {
   // std::ofstream file;
   if (fexists(filename) && !overWrite) {
     if (append) {
@@ -339,12 +342,12 @@ void openTextFile(std::ofstream &file, std::string filename, bool overWrite,
   }
 }
 // with no header
-void printTableOrganized(const std::vector<VecStr> &content,
-                         std::ostream &out) {
+inline void printTableOrganized(const std::vector<VecStr>& content,
+                                std::ostream& out) {
   std::map<int, size_t> sizeMap;
-  for (const auto &contentIter : content) {
+  for (const auto& contentIter : content) {
     int count = 0;
-    for (const auto &lineIter : contentIter) {
+    for (const auto& lineIter : contentIter) {
       if (sizeMap.find(count) == sizeMap.end()) {
         sizeMap.insert(std::make_pair(count, lineIter.size()));
       } else {
@@ -355,9 +358,9 @@ void printTableOrganized(const std::vector<VecStr> &content,
       ++count;
     }
   }
-  for (const auto &contentIter : content) {
+  for (const auto& contentIter : content) {
     int count = 0;
-    for (const auto &lineIter : contentIter) {
+    for (const auto& lineIter : contentIter) {
       out << std::setw((int)sizeMap[count]) << std::left << lineIter;
       out << "\t";
       ++count;
@@ -366,12 +369,12 @@ void printTableOrganized(const std::vector<VecStr> &content,
   }
 }
 // with header
-void printTableOrganized(const std::vector<VecStr> &content,
-                         const VecStr &header, std::ostream &out) {
+inline void printTableOrganized(const std::vector<VecStr>& content,
+                                const VecStr& header, std::ostream& out) {
   std::map<int, size_t> sizeMap;
   {
     int count = 0;
-    for (const auto &lineIter : header) {
+    for (const auto& lineIter : header) {
       if (sizeMap.find(count) == sizeMap.end()) {
         sizeMap.insert(std::make_pair(count, lineIter.size()));
       } else {
@@ -382,9 +385,9 @@ void printTableOrganized(const std::vector<VecStr> &content,
       ++count;
     }
   }
-  for (const auto &contentIter : content) {
+  for (const auto& contentIter : content) {
     int count = 0;
-    for (const auto &lineIter : contentIter) {
+    for (const auto& lineIter : contentIter) {
       if (sizeMap.find(count) == sizeMap.end()) {
         sizeMap.insert(std::make_pair(count, lineIter.size()));
       } else {
@@ -397,16 +400,16 @@ void printTableOrganized(const std::vector<VecStr> &content,
   }
   {
     int count = 0;
-    for (const auto &lineIter : header) {
+    for (const auto& lineIter : header) {
       out << std::setw((int)sizeMap[count]) << std::left << lineIter;
       out << "\t";
       ++count;
     }
     out << std::endl;
   }
-  for (const auto &contentIter : content) {
+  for (const auto& contentIter : content) {
     int count = 0;
-    for (const auto &lineIter : contentIter) {
+    for (const auto& lineIter : contentIter) {
       out << std::setw((int)sizeMap[count]) << std::left << lineIter;
       out << "\t";
       ++count;
@@ -414,9 +417,9 @@ void printTableOrganized(const std::vector<VecStr> &content,
     out << std::endl;
   }
 }
-std::string getCurrentDate() {
+inline std::string getCurrentDate() {
   time_t t = time(0);  // get time now
-  struct tm *now = localtime(&t);
+  struct tm* now = localtime(&t);
   std::stringstream timeStream;
   timeStream << (now->tm_year + 1900) << '-' << leftPadNumStr((now->tm_mon + 1))
              << '-' << leftPadNumStr(now->tm_mday) << '_'
@@ -425,10 +428,10 @@ std::string getCurrentDate() {
   return timeStream.str();
 }
 
-int getdir(const std::string &dir,
-           std::map<std::string, std::pair<std::string, bool>> &files) {
-  DIR *dp;
-  struct dirent *dirp;
+inline int getdir(const std::string& dir,
+                  std::map<std::string, std::pair<std::string, bool>>& files) {
+  DIR* dp;
+  struct dirent* dirp;
   if ((dp = opendir(dir.c_str())) == NULL) {
     std::cout << "Error(" << errno << ") opening " << dir << std::endl;
     return errno;
@@ -456,8 +459,8 @@ int getdir(const std::string &dir,
   return status;
 }
 
-std::map<std::string, std::pair<std::string, bool>> listFilesInDir(
-    const std::string &directoryName, bool recursive) {
+inline std::map<std::string, std::pair<std::string, bool>> listFilesInDir(
+    const std::string& directoryName, bool recursive) {
   std::map<std::string, std::pair<std::string, bool>> files;
   std::map<std::string, std::pair<std::string, bool>>::iterator fileIter;
   getdir(directoryName, files);
@@ -481,9 +484,9 @@ std::map<std::string, std::pair<std::string, bool>> listFilesInDir(
   }
   return files;
 }
-std::string replaceString(std::string theString,
-                          const std::string& replaceSpace,
-                          const std::string& newSpace) {
+inline std::string replaceString(std::string theString,
+                                 const std::string& replaceSpace,
+                                 const std::string& newSpace) {
   size_t spaceSize = replaceSpace.size();
   size_t currPos = theString.find(replaceSpace);
   while (currPos != std::string::npos) {
@@ -493,17 +496,16 @@ std::string replaceString(std::string theString,
   return theString;
 }
 
-
 struct scoreMatrixCell {
-	int32_t upInherit;
-	int32_t leftInherit;
-	int32_t diagInherit;
+  int32_t upInherit;
+  int32_t leftInherit;
+  int32_t diagInherit;
   // for traceback: 'U' = up, 'L' = Left, 'D' = diagonal, 'B' either up or left
   char upInheritPtr;
   char leftInheritPtr;
   char diagInheritPtr;
 };
-static int32_t needleMaximum(int32_t u, int32_t l, int32_t d, char& p) {
+inline int32_t needleMaximum(int32_t u, int32_t l, int32_t d, char& p) {
   if (u == l && u == d) {
     p = 'B';
     return u;
@@ -528,221 +530,198 @@ static int32_t needleMaximum(int32_t u, int32_t l, int32_t d, char& p) {
     return d;
   }
 }
-static int32_t needleScore(const std::string& objA, const std::string& objB) {
-	uint32_t maxSize = 0;
-	if(objA.size() > maxSize){
-		maxSize = objA.size();
-	}
-	if(objB.size() > maxSize){
-		maxSize = objA.size();
-	}
-	int32_t gapOpen = 5;
-	int32_t gapExtend = 1;
-	std::vector<std::vector<scoreMatrixCell>> ScoreMatrix = std::vector<std::vector<scoreMatrixCell>>(
-			maxSize, std::vector<scoreMatrixCell>(maxSize));
-    // std::cout << "doing needle reg" << std::endl;
-    // empty the alignment strings and qualities vectors to reset for the new
-    // alignment
-    // std::cout<<"mark needle non simple"<<std::endl;
-    /*if (currentSetUp_ != "needle") {
-            initializeNeedle();
-    }*/
-    // Create the alignment score matrix to do the alignment, a column for each
-    // letter in sequence b and a row for each letter in sequence a
-    ScoreMatrix[0][0].leftInherit = 0;
-    ScoreMatrix[0][0].upInherit = 0;
-    ScoreMatrix[0][0].diagInherit = 0;
-    ScoreMatrix[0][0].upInheritPtr = '\0';
-    ScoreMatrix[0][0].leftInheritPtr = '\0';
-    ScoreMatrix[0][0].diagInheritPtr = '\0';
-    // initialize first column:
-    for (int i = 1; i < maxSize; i++) {
-      if (i == 1) {
-        ScoreMatrix[i][0].upInherit = -gapOpen;
-        ScoreMatrix[i][0].leftInherit = 0;
-        ScoreMatrix[i][0].diagInherit = 0;
-        ScoreMatrix[i][0].upInheritPtr = 'U';
-        ScoreMatrix[i][0].leftInheritPtr = '\0';
-        ScoreMatrix[i][0].diagInheritPtr = '\0';
-      } else {
-        ScoreMatrix[i][0].upInherit =
-            ScoreMatrix[i - 1][0].upInherit -
-            gapExtend;
-        ScoreMatrix[i][0].leftInherit = 0;
-        ScoreMatrix[i][0].diagInherit = 0;
-        ScoreMatrix[i][0].upInheritPtr = 'U';
-        ScoreMatrix[i][0].leftInheritPtr = '\0';
-        ScoreMatrix[i][0].diagInheritPtr = '\0';
-      }
-    }
-    // initialize first row:
-    for (int j = 1; j < maxSize; j++) {
-      if (j == 1) {
-        ScoreMatrix[0][j].upInherit = 0;
-        ScoreMatrix[0][j].leftInherit = -gapOpen;
-        ScoreMatrix[0][j].diagInherit = 0;
-        ScoreMatrix[0][j].upInheritPtr = '\0';
-        ScoreMatrix[0][j].leftInheritPtr = 'L';
-        ScoreMatrix[0][j].diagInheritPtr = '\0';
-      } else {
-        ScoreMatrix[0][j].upInherit = 0;
-        ScoreMatrix[0][j].leftInherit =
-            ScoreMatrix[0][j - 1].leftInherit -
-            gapExtend;
-        ScoreMatrix[0][j].diagInherit = 0;
-        ScoreMatrix[0][j].upInheritPtr = '\0';
-        ScoreMatrix[0][j].leftInheritPtr = 'L';
-        ScoreMatrix[0][j].diagInheritPtr = '\0';
-      }
-    }
-    // objectA=objA;
-    // objectB=objB;
-
-    // alignObjectA_.clear();
-    // alignObjectB_.clear();
-    // get the length of the strings to create the alignment score matrix
-    uint32_t lena = objA.size() + 1;
-    uint32_t lenb = objB.size() + 1;
-    // std::cout<<"length of A"<<lena<<std::endl;
-    // std::cout<<"length of B"<<lenb<<std::endl;
-    for (uint32_t i = 1; i < lena; i++) {
-      for (uint32_t j = 1; j < lenb; j++) {
-        // std::cout<<"i: "<<i<<"j: "<<j<<std::endl;
-        char ptrFlag;
-        // first set the upInherit score. If we are in the first row, this will
-        // be
-        // the value of the above cell's leftInherit score minus a gap open
-        // penalty.
-        // Otherwise, it will be the max of the three scores in the cell above,
-        // with the appropriate penalty applied (either a
-        // parts.gapScores_.gapOpen or
-        // gapExtend).
-        if (i == 1) {
-          if (j == lenb - 1) {
-            ScoreMatrix[i][j].upInherit =
-                ScoreMatrix[i - 1][j].leftInherit -
-                gapOpen;
-          } else {
-            ScoreMatrix[i][j].upInherit =
-                ScoreMatrix[i - 1][j].leftInherit -
-                gapOpen;
-          }
-          ScoreMatrix[i][j].upInheritPtr = 'L';
-        } else {
-          if (j == lenb - 1) {
-            ScoreMatrix[i][j].upInherit =
-                needleMaximum(ScoreMatrix[i - 1][j].upInherit -
-                                  gapExtend,
-                              ScoreMatrix[i - 1][j].leftInherit -
-                                  gapOpen,
-                              ScoreMatrix[i - 1][j].diagInherit -
-                                  gapOpen,
-                              ptrFlag);
-            ScoreMatrix[i][j].upInheritPtr = ptrFlag;
-          } else {
-            ScoreMatrix[i][j].upInherit =
-                needleMaximum(ScoreMatrix[i - 1][j].upInherit -
-                                  gapExtend,
-                              ScoreMatrix[i - 1][j].leftInherit -
-                                  gapOpen,
-                              ScoreMatrix[i - 1][j].diagInherit -
-                                  gapOpen,
-                              ptrFlag);
-            ScoreMatrix[i][j].upInheritPtr = ptrFlag;
-          }
-        }
-
-        // next set the leftInherit score. If we are in the first column, this
-        // will be the value of the left cell's upInherit score minus a gap open
-        // penalty.
-        // Otherwise, it will be the max score of the three scores in the cell
-        // to
-        // the left, with the appropriate penalty applied.
-        if (j == 1) {
-          if (i == lena - 1) {
-            ScoreMatrix[i][j].leftInherit =
-                ScoreMatrix[i][j - 1].upInherit -
-                gapOpen;
-          } else {
-            ScoreMatrix[i][j].leftInherit =
-                ScoreMatrix[i][j - 1].upInherit -
-                gapOpen;
-          }
-          ScoreMatrix[i][j].leftInheritPtr = 'U';
-        } else {
-          if (i == lena - 1) {
-            ScoreMatrix[i][j].leftInherit =
-                needleMaximum(ScoreMatrix[i][j - 1].upInherit -
-                                  gapOpen,
-                              ScoreMatrix[i][j - 1].leftInherit -
-                                  gapExtend,
-                              ScoreMatrix[i][j - 1].diagInherit -
-                                  gapOpen,
-                              ptrFlag);
-            ScoreMatrix[i][j].leftInheritPtr = ptrFlag;
-          } else {
-            ScoreMatrix[i][j].leftInherit =
-                needleMaximum(ScoreMatrix[i][j - 1].upInherit -
-                                  gapOpen,
-                              ScoreMatrix[i][j - 1].leftInherit -
-                                  gapExtend,
-                              ScoreMatrix[i][j - 1].diagInherit -
-                                  gapOpen,
-                              ptrFlag);
-            ScoreMatrix[i][j].leftInheritPtr = ptrFlag;
-          }
-        }
-        // int match = scoringArray[objA.seqBase_.seq_[i -
-        // 1]-'A'][objB.seqBase_.seq_[j - 1]-'A'];
-        int match = 0;
-        if(objA[i - 1] == objB[j - 1]){
-        	match = 2;
-        }else{
-        	match = -2;
-        }
-
-        if (i == 1) {
-          ScoreMatrix[i][j].diagInherit =
-              ScoreMatrix[i - 1][j - 1].leftInherit + match;
-          ScoreMatrix[i][j].diagInheritPtr = 'L';
-        } else if (j == 1) {
-          ScoreMatrix[i][j].diagInherit =
-              ScoreMatrix[i - 1][j - 1].upInherit + match;
-          ScoreMatrix[i][j].diagInheritPtr = 'U';
-        } else {
-          ScoreMatrix[i][j].diagInherit =
-              match +
-              needleMaximum(ScoreMatrix[i - 1][j - 1].upInherit,
-                            ScoreMatrix[i - 1][j - 1].leftInherit,
-                            ScoreMatrix[i - 1][j - 1].diagInherit,
-                            ptrFlag);
-          ScoreMatrix[i][j].diagInheritPtr = ptrFlag;
-        }
-      }
-    }
-    int icursor = lena - 1;
-    int jcursor = lenb - 1;
-
-    // tracerNext holds to where to go next in the matrix, will be (D) diagonal,
-    // (U) up, or (L) left depending on the maximum score determined during the
-    // matrix set up.
-    char tracerNext = ' ';
-
-    // get the alignment score from the  bottom right cell and set the tacer to
-    // where to go next
-    // keep tracing back until at the begining of either sequence
-    // Traceback algorithm follows. Score is the max of all three scores stored
-    // in
-    // the bottom right cell.
-    // Alignments are constructed by following the correct pointer backwards at
-    // each stage.
-    // Since alignment strings are constructed in reverse, we must call the
-    // reverse() funcion after traceback.
-    int32_t score = needleMaximum(
-        ScoreMatrix[icursor][jcursor].upInherit,
-        ScoreMatrix[icursor][jcursor].leftInherit,
-        ScoreMatrix[icursor][jcursor].diagInherit, tracerNext);
-    return score;
+inline int32_t needleScore(const std::string& objA, const std::string& objB) {
+  uint32_t maxSize = 0;
+  if (objA.size() > maxSize) {
+    maxSize = objA.size();
   }
+  if (objB.size() > maxSize) {
+    maxSize = objA.size();
+  }
+  int32_t gapOpen = 5;
+  int32_t gapExtend = 1;
+  std::vector<std::vector<scoreMatrixCell>> ScoreMatrix =
+      std::vector<std::vector<scoreMatrixCell>>(
+          maxSize, std::vector<scoreMatrixCell>(maxSize));
+  // std::cout << "doing needle reg" << std::endl;
+  // empty the alignment strings and qualities vectors to reset for the new
+  // alignment
+  // std::cout<<"mark needle non simple"<<std::endl;
+  /*if (currentSetUp_ != "needle") {
+          initializeNeedle();
+  }*/
+  // Create the alignment score matrix to do the alignment, a column for each
+  // letter in sequence b and a row for each letter in sequence a
+  ScoreMatrix[0][0].leftInherit = 0;
+  ScoreMatrix[0][0].upInherit = 0;
+  ScoreMatrix[0][0].diagInherit = 0;
+  ScoreMatrix[0][0].upInheritPtr = '\0';
+  ScoreMatrix[0][0].leftInheritPtr = '\0';
+  ScoreMatrix[0][0].diagInheritPtr = '\0';
+  // initialize first column:
+  for (int i = 1; i < maxSize; i++) {
+    if (i == 1) {
+      ScoreMatrix[i][0].upInherit = -gapOpen;
+      ScoreMatrix[i][0].leftInherit = 0;
+      ScoreMatrix[i][0].diagInherit = 0;
+      ScoreMatrix[i][0].upInheritPtr = 'U';
+      ScoreMatrix[i][0].leftInheritPtr = '\0';
+      ScoreMatrix[i][0].diagInheritPtr = '\0';
+    } else {
+      ScoreMatrix[i][0].upInherit = ScoreMatrix[i - 1][0].upInherit - gapExtend;
+      ScoreMatrix[i][0].leftInherit = 0;
+      ScoreMatrix[i][0].diagInherit = 0;
+      ScoreMatrix[i][0].upInheritPtr = 'U';
+      ScoreMatrix[i][0].leftInheritPtr = '\0';
+      ScoreMatrix[i][0].diagInheritPtr = '\0';
+    }
+  }
+  // initialize first row:
+  for (int j = 1; j < maxSize; j++) {
+    if (j == 1) {
+      ScoreMatrix[0][j].upInherit = 0;
+      ScoreMatrix[0][j].leftInherit = -gapOpen;
+      ScoreMatrix[0][j].diagInherit = 0;
+      ScoreMatrix[0][j].upInheritPtr = '\0';
+      ScoreMatrix[0][j].leftInheritPtr = 'L';
+      ScoreMatrix[0][j].diagInheritPtr = '\0';
+    } else {
+      ScoreMatrix[0][j].upInherit = 0;
+      ScoreMatrix[0][j].leftInherit =
+          ScoreMatrix[0][j - 1].leftInherit - gapExtend;
+      ScoreMatrix[0][j].diagInherit = 0;
+      ScoreMatrix[0][j].upInheritPtr = '\0';
+      ScoreMatrix[0][j].leftInheritPtr = 'L';
+      ScoreMatrix[0][j].diagInheritPtr = '\0';
+    }
+  }
+  // objectA=objA;
+  // objectB=objB;
 
-} // cppprogutils
+  // alignObjectA_.clear();
+  // alignObjectB_.clear();
+  // get the length of the strings to create the alignment score matrix
+  uint32_t lena = objA.size() + 1;
+  uint32_t lenb = objB.size() + 1;
+  // std::cout<<"length of A"<<lena<<std::endl;
+  // std::cout<<"length of B"<<lenb<<std::endl;
+  for (uint32_t i = 1; i < lena; i++) {
+    for (uint32_t j = 1; j < lenb; j++) {
+      // std::cout<<"i: "<<i<<"j: "<<j<<std::endl;
+      char ptrFlag;
+      // first set the upInherit score. If we are in the first row, this will
+      // be
+      // the value of the above cell's leftInherit score minus a gap open
+      // penalty.
+      // Otherwise, it will be the max of the three scores in the cell above,
+      // with the appropriate penalty applied (either a
+      // parts.gapScores_.gapOpen or
+      // gapExtend).
+      if (i == 1) {
+        if (j == lenb - 1) {
+          ScoreMatrix[i][j].upInherit =
+              ScoreMatrix[i - 1][j].leftInherit - gapOpen;
+        } else {
+          ScoreMatrix[i][j].upInherit =
+              ScoreMatrix[i - 1][j].leftInherit - gapOpen;
+        }
+        ScoreMatrix[i][j].upInheritPtr = 'L';
+      } else {
+        if (j == lenb - 1) {
+          ScoreMatrix[i][j].upInherit = needleMaximum(
+              ScoreMatrix[i - 1][j].upInherit - gapExtend,
+              ScoreMatrix[i - 1][j].leftInherit - gapOpen,
+              ScoreMatrix[i - 1][j].diagInherit - gapOpen, ptrFlag);
+          ScoreMatrix[i][j].upInheritPtr = ptrFlag;
+        } else {
+          ScoreMatrix[i][j].upInherit = needleMaximum(
+              ScoreMatrix[i - 1][j].upInherit - gapExtend,
+              ScoreMatrix[i - 1][j].leftInherit - gapOpen,
+              ScoreMatrix[i - 1][j].diagInherit - gapOpen, ptrFlag);
+          ScoreMatrix[i][j].upInheritPtr = ptrFlag;
+        }
+      }
+
+      // next set the leftInherit score. If we are in the first column, this
+      // will be the value of the left cell's upInherit score minus a gap open
+      // penalty.
+      // Otherwise, it will be the max score of the three scores in the cell
+      // to
+      // the left, with the appropriate penalty applied.
+      if (j == 1) {
+        if (i == lena - 1) {
+          ScoreMatrix[i][j].leftInherit =
+              ScoreMatrix[i][j - 1].upInherit - gapOpen;
+        } else {
+          ScoreMatrix[i][j].leftInherit =
+              ScoreMatrix[i][j - 1].upInherit - gapOpen;
+        }
+        ScoreMatrix[i][j].leftInheritPtr = 'U';
+      } else {
+        if (i == lena - 1) {
+          ScoreMatrix[i][j].leftInherit = needleMaximum(
+              ScoreMatrix[i][j - 1].upInherit - gapOpen,
+              ScoreMatrix[i][j - 1].leftInherit - gapExtend,
+              ScoreMatrix[i][j - 1].diagInherit - gapOpen, ptrFlag);
+          ScoreMatrix[i][j].leftInheritPtr = ptrFlag;
+        } else {
+          ScoreMatrix[i][j].leftInherit = needleMaximum(
+              ScoreMatrix[i][j - 1].upInherit - gapOpen,
+              ScoreMatrix[i][j - 1].leftInherit - gapExtend,
+              ScoreMatrix[i][j - 1].diagInherit - gapOpen, ptrFlag);
+          ScoreMatrix[i][j].leftInheritPtr = ptrFlag;
+        }
+      }
+      // int match = scoringArray[objA.seqBase_.seq_[i -
+      // 1]-'A'][objB.seqBase_.seq_[j - 1]-'A'];
+      int match = 0;
+      if (objA[i - 1] == objB[j - 1]) {
+        match = 2;
+      } else {
+        match = -2;
+      }
+
+      if (i == 1) {
+        ScoreMatrix[i][j].diagInherit =
+            ScoreMatrix[i - 1][j - 1].leftInherit + match;
+        ScoreMatrix[i][j].diagInheritPtr = 'L';
+      } else if (j == 1) {
+        ScoreMatrix[i][j].diagInherit =
+            ScoreMatrix[i - 1][j - 1].upInherit + match;
+        ScoreMatrix[i][j].diagInheritPtr = 'U';
+      } else {
+        ScoreMatrix[i][j].diagInherit =
+            match + needleMaximum(ScoreMatrix[i - 1][j - 1].upInherit,
+                                  ScoreMatrix[i - 1][j - 1].leftInherit,
+                                  ScoreMatrix[i - 1][j - 1].diagInherit,
+                                  ptrFlag);
+        ScoreMatrix[i][j].diagInheritPtr = ptrFlag;
+      }
+    }
+  }
+  int icursor = lena - 1;
+  int jcursor = lenb - 1;
+
+  // tracerNext holds to where to go next in the matrix, will be (D) diagonal,
+  // (U) up, or (L) left depending on the maximum score determined during the
+  // matrix set up.
+  char tracerNext = ' ';
+
+  // get the alignment score from the  bottom right cell and set the tacer to
+  // where to go next
+  // keep tracing back until at the begining of either sequence
+  // Traceback algorithm follows. Score is the max of all three scores stored
+  // in
+  // the bottom right cell.
+  // Alignments are constructed by following the correct pointer backwards at
+  // each stage.
+  // Since alignment strings are constructed in reverse, we must call the
+  // reverse() funcion after traceback.
+  int32_t score =
+      needleMaximum(ScoreMatrix[icursor][jcursor].upInherit,
+                    ScoreMatrix[icursor][jcursor].leftInherit,
+                    ScoreMatrix[icursor][jcursor].diagInherit, tracerNext);
+  return score;
+}
+
+}  // cppprogutils

@@ -7,7 +7,6 @@
  *      Author: nickhathaway
  */
 
-
 #include <vector>
 #include <map>
 #include <string>
@@ -39,10 +38,8 @@
 #include <iomanip>
 #include <functional>
 
-
 namespace cppprogutils {
 
 typedef std::map<std::string, std::string> MapStrStr;
 typedef std::vector<std::string> VecStr;
-
 }
