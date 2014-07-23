@@ -538,6 +538,7 @@ inline int32_t needleScore(const std::string& objA, const std::string& objB) {
   if (objB.size() > maxSize) {
     maxSize = objA.size();
   }
+  maxSize += 10;
   int32_t gapOpen = 5;
   int32_t gapExtend = 1;
   std::vector<std::vector<scoreMatrixCell>> ScoreMatrix =
