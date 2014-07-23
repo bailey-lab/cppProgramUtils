@@ -98,6 +98,7 @@ class commandLineArguments {
       return false;
     }
   }
+#ifndef __linux__
   // size_t
   bool lookForOption(size_t& option, const std::string& flag) {
     if (containsFlagCaseInsensitive(flag)) {
@@ -107,6 +108,7 @@ class commandLineArguments {
       return false;
     }
   }
+#endif
   // uint16_t
   bool lookForOption(uint16_t& option, const std::string& flag) {
     if (containsFlagCaseInsensitive(flag)) {
