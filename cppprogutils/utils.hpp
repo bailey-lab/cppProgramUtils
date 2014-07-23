@@ -536,7 +536,7 @@ inline int32_t needleScore(const std::string& objA, const std::string& objB) {
     maxSize = objA.size();
   }
   if (objB.size() > maxSize) {
-    maxSize = objA.size();
+    maxSize = objB.size();
   }
   maxSize += 10;
   int32_t gapOpen = 5;
