@@ -560,7 +560,7 @@ inline int32_t needleScore(const std::string& objA, const std::string& objB) {
   ScoreMatrix[0][0].leftInheritPtr = '\0';
   ScoreMatrix[0][0].diagInheritPtr = '\0';
   // initialize first column:
-  for (int i = 1; i < maxSize; i++) {
+  for (uint32_t i = 1; i < maxSize; i++) {
     if (i == 1) {
       ScoreMatrix[i][0].upInherit = -gapOpen;
       ScoreMatrix[i][0].leftInherit = 0;
@@ -578,7 +578,7 @@ inline int32_t needleScore(const std::string& objA, const std::string& objB) {
     }
   }
   // initialize first row:
-  for (int j = 1; j < maxSize; j++) {
+  for (uint32_t j = 1; j < maxSize; j++) {
     if (j == 1) {
       ScoreMatrix[0][j].upInherit = 0;
       ScoreMatrix[0][j].leftInherit = -gapOpen;
