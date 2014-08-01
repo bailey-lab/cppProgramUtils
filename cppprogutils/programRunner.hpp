@@ -61,6 +61,14 @@ class programRunner {
     listPrograms(std::cout, inputCommands["-program"]);
     return 1;
   }
+  virtual int runProgram(std::vector<MapStrStr> inputCommands) const {
+  	int status = 0;
+  	for(const auto & com : inputCommands){
+  		status = runProgram(com);
+  	}
+
+    return status;
+  }
 
   virtual void listPrograms(std::ostream &out, const std::string &command = "",
                             const std::string &nameOfProgram = "programRunner")
@@ -251,27 +259,24 @@ class programRunner {
       allCommands.emplace_back(currentCommands);
       std::cout << std::endl;
     }
-    std::vector<uint32_t> comNums;
-    uint32_t pos = 0;
-    while (pos < allCommands.size()) {
-      comNums.emplace_back(pos);
-      ++pos;
+    std::vector<std::vector<MapStrStr>> splitCommands(numThreads);
+    uint32_t comPos = 0;
+    while(comPos < allCommands.size()){
+    	uint32_t tNum = 0;
+    	while(tNum < numThreads && comPos < allCommands.size()){
+    		splitCommands[tNum].emplace_back(allCommands[comPos]);
+    		++tNum;
+    		++comPos;
+    	}
     }
-    std::vector<uint32_t> threadNums(numThreads);
-    std::iota(threadNums.begin(), threadNums.end(), 0);
-
-    for (const auto &comPos : comNums) {
-      std::vector<std::thread> threads;
-      for (const auto &t : threadNums) {
-        if ((t + comPos) < allCommands.size()) {
-          threads.emplace_back(
-              std::thread([&](MapStrStr com) { runProgram(com); },
-                          allCommands[t + comPos]));
-        }
-      }
-      for (auto &t : threads) {
-        t.join();
-      }
+    std::vector<std::thread> threads;
+    for(uint32_t t = 0; t < numThreads; ++t){
+    	threads.emplace_back(
+    	              std::thread([&](std::vector<MapStrStr> coms) { runProgram(coms); },
+    	              		splitCommands[t]));
+    }
+    for (auto &t : threads) {
+      t.join();
     }
     setUp.logRunTime(runLog);
     setUp.logRunTime(std::cout);
