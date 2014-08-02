@@ -66,7 +66,6 @@ class programRunner {
   	for(const auto & com : inputCommands){
   		status = runProgram(com);
   	}
-
     return status;
   }
 

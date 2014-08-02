@@ -19,6 +19,7 @@ class commandLineArguments {
     std::stringstream hold;
     logRunArgumnets(hold, argc, argv);
     commandLine_ = hold.str();
+    arguments_["-commandline"] = commandLine_;
   }
   commandLineArguments(const MapStrStr& inputCommands)
       : arguments_(inputCommands) {
@@ -199,7 +200,7 @@ class commandLineArguments {
     for (int args = 0; args < argc; ++args) {
       out << argv[args] << " ";
     }
-    out << std::endl << std::endl;
+    out << "\n";
   }
   static void logRunArgumnets(std::ostream& out,
                               const std::string& commandLine) {

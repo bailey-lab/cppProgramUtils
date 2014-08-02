@@ -10,6 +10,7 @@
 #include "cppprogutils/utils.hpp"
 #include "cppprogutils/commandLineArguments.hpp"
 #include "cppprogutils/parameter.hpp"
+#include "cppprogutils/runLog.hpp"
 
 namespace cppprogutils {
 
@@ -17,7 +18,8 @@ class programSetUp {
 
  public:
   // constructors
-  programSetUp(int argc, char *argv[]) {
+  programSetUp(int argc, char *argv[]):
+  	start_(std::chrono::high_resolution_clock::now()) {
     commands_ = commandLineArguments(argc, argv);
     commands_.arguments_["-program"] = argv[0];
     if (commands_.arguments_.find("-program") == commands_.arguments_.end()) {
@@ -25,26 +27,25 @@ class programSetUp {
     } else {
       programName_ = commands_["-program"];
     }
-    start_ = std::chrono::high_resolution_clock::now();
   }
-  programSetUp(const commandLineArguments &inputCommands) {
+  programSetUp(const commandLineArguments &inputCommands):
+  	start_(std::chrono::high_resolution_clock::now()) {
     commands_ = inputCommands;
     if (commands_.arguments_.find("-program") == commands_.arguments_.end()) {
       programName_ = "program";
     } else {
       programName_ = commands_["-program"];
     }
-    start_ = std::chrono::high_resolution_clock::now();
   }
 
-  programSetUp(const MapStrStr &inputCommands) {
+  programSetUp(const MapStrStr &inputCommands):
+  	start_(std::chrono::high_resolution_clock::now()) {
     commands_ = commandLineArguments(inputCommands);
     if (commands_.arguments_.find("-program") == commands_.arguments_.end()) {
       programName_ = "program";
     } else {
       programName_ = commands_["-program"];
     }
-    start_ = std::chrono::high_resolution_clock::now();
   }
 
   virtual ~programSetUp() {}
@@ -53,7 +54,6 @@ class programSetUp {
   commandLineArguments commands_;
 
   std::chrono::time_point<std::chrono::high_resolution_clock> start_;
-  ;
   // valid options
   VecStr validOptions_;
   VecStr warnings_;
@@ -64,6 +64,12 @@ class programSetUp {
   // parameters for logging
   parametersHolder pars_;
   std::string programName_;
+  runLog rLog_;
+
+  void startARunLog(const std::string & dirName){
+  	rLog_.setFilenameAndOpen(dirName + "runLog_"+ replaceString(programName_, "./", "") + ".txt", start_);
+  	rLog_.startRunLog(commands_.arguments_);
+  }
 
   void writeParametersFile(const std::string &fileName, bool overWrite,
                            bool failOnWriteFailure) {

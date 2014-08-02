@@ -14,3 +14,4 @@
 #include "cppprogutils/parameter.hpp"
 #include "cppprogutils/programRunner.hpp"
 #include "cppprogutils/programSetUp.hpp"
+#include "cppprogutils/runLog.hpp"
