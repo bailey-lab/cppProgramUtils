@@ -7,7 +7,7 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutils/utils.hpp"
+#include "cppprogutils/utils.h"
 namespace cppprogutils {
 
 /**@brief Convert the normal argc and argv arguments into a class enabled for advanced

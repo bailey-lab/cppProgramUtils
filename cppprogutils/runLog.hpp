@@ -7,22 +7,25 @@
  */
 
 #include "cppprogutils/common.hpp"
-#include "cppprogutils/utils.hpp"
+#include "cppprogutils/utils.h"
 
 namespace cppprogutils {
+/**@brief runLog class to help log run info
+ *
+ */
 class runLog {
  public:
-  /**Constructor with the runLog filename and start time as now
+  /**@brief Constructor with the runLog filename and start time as now
    *
    * @param fileName The name of the runLog file to log the information to
    *
    */
   runLog(const std::string& fileName)
-      : fileName_(fileName), start_(std::chrono::high_resolution_clock::now()) {
+      : fileName_(fileName) {
     openTextFile(runLogFile_, fileName_, ".txt", true, false);
   }
 
-  /**Constructor with the runLog filename and the given start
+  /**@brief Constructor with the runLog filename and the given start
    *
    * @param fileName The name of the runLog file to log the information to
    * @param start Use the given start time for time start
@@ -30,11 +33,11 @@ class runLog {
    */
   runLog(const std::string& fileName,
          std::chrono::time_point<std::chrono::high_resolution_clock> start)
-      : fileName_(fileName), start_(start) {
+      : fileName_(fileName), timer_(start) {
     openTextFile(runLogFile_, fileName_, ".txt", true, false);
   }
 
-  /** Empty constructor, file won't be opened until setFilenameAndOpen() is
+  /**@brief Empty constructor, file won't be opened until setFilenameAndOpen() is
    *called
    *
    */
@@ -42,24 +45,30 @@ class runLog {
 
  private:
   // Members
-  /**Name of the runLog file
+  /**@brief Name of the runLog file
    *
    */
   std::string fileName_;
 
-  /**The start time stored as a std::chrono::time_point
+  /**@brief The start time stored as a stopWatch object
    *
    */
-  std::chrono::time_point<std::chrono::high_resolution_clock> start_;
+  stopWatch timer_;
 
  public:
-
-  /**The std::ofstream object to log the info to
+  /**@brief set the current lap name
+   *
+   * @param str The name for the current lap
+   */
+  void setCurrentLapName(const std::string & str){
+  	timer_.currentLapName_ = str;
+  }
+  /**@brief The std::ofstream object to log the info to
    *
    */
   std::ofstream runLogFile_;
 
-  /**Open the runLog file with this name, and the start time will be now, will
+  /**@brief Open the runLog file with this name, and the start time will be now, will
    *fail if runLog already opened
    *@param fileName The filename for the runLog
    */
@@ -73,11 +82,11 @@ class runLog {
     } else {
       fileName_ = fileName;
       openTextFile(runLogFile_, fileName_, ".txt", true, false);
-      start_ = std::chrono::high_resolution_clock::now();
+      timer_ = stopWatch();
     }
   }
 
-  /**Open the runLog file with this name and given start time, will fail if
+  /**@brief Open the runLog file with this name and given start time, will fail if
    * runLog already opened
    * @param fileName The filename for the runLog
    * @param start Use given start time for logging time
@@ -94,11 +103,11 @@ class runLog {
     } else {
       fileName_ = fileName;
       openTextFile(runLogFile_, fileName_, ".txt", true, false);
-      start_ = start;
+      timer_ = stopWatch(start);
     }
   }
 
-  /** Put starting stamp on runLog by putting date and the command given for the
+  /**@brief Put starting stamp on runLog by putting date and the command given for the
    *program, will fail if runLog not started
    *
    * @param inputCommands The commands for the current program that contains the
@@ -121,20 +130,34 @@ class runLog {
     }
   }
 
-  /** Log the current time difference from when the time point start_, will fail
+  /**@brief Log the current time difference from when the time point start_, will fail
    *if runLog not started
    *
    */
-  void logTime(uint32_t decPlaces = 6) {
+  void logTotalTime(uint32_t decPlaces = 6) {
     if (runLogFile_.is_open()) {
-      runLogFile_
-          << getTimeFormat(
-                 std::chrono::duration_cast<std::chrono::nanoseconds>(
-                     std::chrono::high_resolution_clock::now() - start_)
-                         .count() /
-                     static_cast<double>(
-                         std::chrono::high_resolution_clock::period::den),
-                 true, decPlaces) << "\n";
+      runLogFile_ << timer_.totalTimeFormatted(decPlaces) << "\n";
+    } else {
+      std::cerr << "\033[1;31m";
+      std::cerr << "in runLog.logTime()\n";
+      std::cerr << "RunLog object's runLogfile not open yet\n";
+      std::cerr << "while attempting to log time\n";
+      std::cerr << "\033[0m";
+    }
+  }
+  /**@brief Log the current time for the current lap information and start new lap
+   *
+   * @param timeNewName A new name for the next lap
+   * @param decPlaces The number of decimal places to have
+   */
+  void logCurrentTime(const std::string & timeNewName = "",
+  		uint32_t decPlaces = 6) {
+    if (runLogFile_.is_open()) {
+    	runLogFile_ << timer_.currentLapName_ << " time: "
+    			<< timer_.timeLapFormatted(decPlaces) << "\n";
+      runLogFile_ << "total time: " << timer_.totalTimeFormatted(decPlaces)
+      		<< "\n";
+    	timer_.startNewLap(timeNewName);
     } else {
       std::cerr << "\033[1;31m";
       std::cerr << "in runLog.logTime()\n";
@@ -144,17 +167,22 @@ class runLog {
     }
   }
 
-  /**Destructor, log the end time if a runLog is open
+  /**@brief Destructor, log the the total time if a runLog is open
    *
    */
   ~runLog() {
   	if(runLogFile_.is_open()){
-  		logTime(6);
+  		if(timer_.lapTimes_.empty()){
+  			logTotalTime(6);
+  		}else{
+  			timer_.logLapTimes(runLogFile_, true, 6, true);
+  			runLogFile_ << "total time: "; logTotalTime(6);
+  		}
   	}
   }
 };
 
-/**Input operator to log information to the runLogFile_ for the given runLog,
+/**@brief Input operator to log information to the runLogFile_ for the given runLog,
  *will fail if runLog not started
  *
  */

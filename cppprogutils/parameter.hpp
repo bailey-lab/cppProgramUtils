@@ -7,7 +7,7 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutils/utils.hpp"
+#include "cppprogutils/utils.h"
 namespace cppprogutils {
 
 class parameter {

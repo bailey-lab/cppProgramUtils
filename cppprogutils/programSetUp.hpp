@@ -7,7 +7,7 @@
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
 //
 
-#include "cppprogutils/utils.hpp"
+#include "cppprogutils/utils.h"
 #include "cppprogutils/commandLineArguments.hpp"
 #include "cppprogutils/parameter.hpp"
 #include "cppprogutils/runLog.hpp"
@@ -29,8 +29,7 @@ class programSetUp {
 *
    */
   programSetUp(int argc, char *argv[])
-      : commands_(commandLineArguments(argc, argv)),
-        start_(std::chrono::high_resolution_clock::now()) {
+      : commands_(commandLineArguments(argc, argv)) {
     commands_.arguments_["-program"] = argv[0];
     // get rid of the ./ if program is being called from current dir, it can
     // mess things up latter
@@ -45,8 +44,7 @@ class programSetUp {
 *
    */
   programSetUp(const commandLineArguments &inputCommands)
-      : commands_(inputCommands),
-        start_(std::chrono::high_resolution_clock::now()) {
+      : commands_(inputCommands){
     auto progSearch = commands_.arguments_.find("-program");
     // if no program name (though there really should be) just call it program
     if (commands_.arguments_.end() == progSearch) {
@@ -64,8 +62,8 @@ class programSetUp {
 *
    */
   programSetUp(const MapStrStr &inputCommands)
-      : commands_(commandLineArguments(inputCommands)),
-        start_(std::chrono::high_resolution_clock::now()) {
+      : commands_(commandLineArguments(inputCommands))
+         {
     auto progSearch = commands_.arguments_.find("-program");
     // if no program name (though there really should be) just call it program
     if (commands_.arguments_.end() == progSearch) {
@@ -89,7 +87,7 @@ class programSetUp {
    *so run time can be logged
    *
    */
-  std::chrono::time_point<std::chrono::high_resolution_clock> start_;
+  stopWatch timer_;
 
  protected:
   // valid options
@@ -147,7 +145,7 @@ class programSetUp {
   void startARunLog(const std::string &dirName) {
     rLog_.setFilenameAndOpen(
         dirName + "runLog_" + replaceString(programName_, "./", "") + ".txt",
-        start_);
+        timer_.start_);
     rLog_.startRunLog(commands_.arguments_);
   }
 
@@ -342,9 +340,7 @@ class programSetUp {
    *
    */
   double getRunTimeInSecs() {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(
-               std::chrono::high_resolution_clock::now() - start_).count() /
-           static_cast<double>(std::chrono::high_resolution_clock::period::den);
+    return timer_.totalTime();
   }
 
   /**@brief Get a string formated run time in seconds rounded to the nearest
@@ -353,7 +349,7 @@ class programSetUp {
    * seconds etc.
    */
   std::string getRunTime() {
-    return "(" + getTimeFormat(getRunTimeInSecs(), true, 2) + ")";
+    return programName_ +  " (" + timer_.totalTimeFormatted(2) + ")";
   }
 
   /**@brief Function to log the run time to a std::ostream

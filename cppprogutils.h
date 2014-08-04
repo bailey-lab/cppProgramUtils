@@ -8,7 +8,7 @@
  */
 
 #include "cppprogutils/common.hpp"
-#include "cppprogutils/utils.hpp"
+#include "cppprogutils/utils.h"
 #include "cppprogutils/commandLineArguments.hpp"
 #include "cppprogutils/oneRing.hpp"
 #include "cppprogutils/parameter.hpp"
