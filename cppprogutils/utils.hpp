@@ -26,6 +26,7 @@ std::string leftPadNumStr(T num, T highestNumber = 10) {
   ans << num;
   return ans.str();
 }
+
 inline std::string convertBoolToString(bool convert) {
   if (convert) {
     return "true";
@@ -33,6 +34,7 @@ inline std::string convertBoolToString(bool convert) {
     return "false";
   }
 }
+
 inline double roundDecPlaces(double num, int decPlaces) {
   double rounder = pow(10, decPlaces);
   return (floor(num * rounder + 0.5) / rounder);
@@ -43,15 +45,18 @@ inline void stringToUpper(std::string& str) {
     c = toupper(c);
   }
 }
+
 inline void stringToLower(std::string& str) {
   for (auto& c : str) {
     c = tolower(c);
   }
 }
+
 inline std::string stringToUpperReturn(std::string str) {
   stringToUpper(str);
   return str;
 }
+
 inline std::string stringToLowerReturn(std::string str) {
   stringToLower(str);
   return str;
@@ -156,6 +161,7 @@ inline bool stringContainsAllDigits(const std::string& str) {
   }
   return true;
 }
+
 inline std::string getTimeFormat(double timeInSecondsOriginal, bool wordy,
                                  int secondsDecimalPlaces) {
   std::stringstream duration;
@@ -254,6 +260,7 @@ inline std::string boldText(const std::string& title,
                             const std::string& colorCode) {
   return "\033[1;" + colorCode + "m" + title + "\033[0m";
 }
+
 inline std::string boldBlackText(const std::string& title) {
   return boldText(title, "30");
 }
@@ -289,11 +296,13 @@ inline std::string endAllAttributes(const std::string& add = "") {
   }
   return output;
 }
+
 template <class T>
 void addOtherVec(std::vector<T>& reads, const std::vector<T>& otherVec) {
   reads.reserve(reads.size() + otherVec.size());
   reads.insert(reads.end(), otherVec.begin(), otherVec.end());
 }
+
 template <typename T>
 bool vectorContains(const std::vector<T>& vec, const T& search) {
   for (const auto& iter : vec) {
@@ -303,6 +312,7 @@ bool vectorContains(const std::vector<T>& vec, const T& search) {
   }
   return false;
 }
+
 // check to see if a file exists
 inline bool fexists(const std::string& filename) {
   std::ifstream ifile(filename.c_str());
@@ -341,6 +351,7 @@ inline void openTextFile(std::ofstream& file, std::string filename,
     }
   }
 }
+
 // with no header
 inline void printTableOrganized(const std::vector<VecStr>& content,
                                 std::ostream& out) {
@@ -368,6 +379,7 @@ inline void printTableOrganized(const std::vector<VecStr>& content,
     out << std::endl;
   }
 }
+
 // with header
 inline void printTableOrganized(const std::vector<VecStr>& content,
                                 const VecStr& header, std::ostream& out) {
@@ -417,6 +429,7 @@ inline void printTableOrganized(const std::vector<VecStr>& content,
     out << std::endl;
   }
 }
+
 inline std::string getCurrentDate() {
   time_t t = time(0);  // get time now
   struct tm* now = localtime(&t);
@@ -484,6 +497,7 @@ inline std::map<std::string, std::pair<std::string, bool>> listFilesInDir(
   }
   return files;
 }
+
 inline std::string replaceString(std::string theString,
                                  const std::string& replaceSpace,
                                  const std::string& newSpace) {
@@ -505,6 +519,7 @@ struct scoreMatrixCell {
   char leftInheritPtr;
   char diagInheritPtr;
 };
+
 inline int32_t needleMaximum(int32_t u, int32_t l, int32_t d, char& p) {
   if (u == l && u == d) {
     p = 'B';
@@ -530,6 +545,7 @@ inline int32_t needleMaximum(int32_t u, int32_t l, int32_t d, char& p) {
     return d;
   }
 }
+
 inline int32_t needleScore(const std::string& objA, const std::string& objB) {
   uint32_t maxSize = 0;
   if (objA.size() > maxSize) {
@@ -725,4 +741,4 @@ inline int32_t needleScore(const std::string& objA, const std::string& objB) {
   return score;
 }
 
-}  // cppprogutils
+}  // namespace cppprogutils

@@ -8,6 +8,7 @@
 
 #include "cppprogutils/common.hpp"
 #include "cppprogutils/utils.hpp"
+
 namespace cppprogutils {
 class runLog {
  public:
@@ -20,6 +21,7 @@ class runLog {
       : fileName_(fileName), start_(std::chrono::high_resolution_clock::now()) {
     openTextFile(runLogFile_, fileName_, ".txt", true, false);
   }
+
   /**Constructor with the runLog filename and the given start
    *
    * @param fileName The name of the runLog file to log the information to
@@ -31,6 +33,7 @@ class runLog {
       : fileName_(fileName), start_(start) {
     openTextFile(runLogFile_, fileName_, ".txt", true, false);
   }
+
   /** Empty constructor, file won't be opened until setFilenameAndOpen() is
    *called
    *
@@ -43,16 +46,19 @@ class runLog {
    *
    */
   std::string fileName_;
+
   /**The start time stored as a std::chrono::time_point
    *
    */
   std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 
  public:
+
   /**The std::ofstream object to log the info to
    *
    */
   std::ofstream runLogFile_;
+
   /**Open the runLog file with this name, and the start time will be now, will
    *fail if runLog already opened
    *@param fileName The filename for the runLog
@@ -70,6 +76,7 @@ class runLog {
       start_ = std::chrono::high_resolution_clock::now();
     }
   }
+
   /**Open the runLog file with this name and given start time, will fail if
    * runLog already opened
    * @param fileName The filename for the runLog
@@ -90,6 +97,7 @@ class runLog {
       start_ = start;
     }
   }
+
   /** Put starting stamp on runLog by putting date and the command given for the
    *program, will fail if runLog not started
    *
@@ -112,6 +120,7 @@ class runLog {
       std::cerr << "\033[0m";
     }
   }
+
   /** Log the current time difference from when the time point start_, will fail
    *if runLog not started
    *
@@ -134,11 +143,13 @@ class runLog {
       std::cerr << "\033[0m";
     }
   }
+
   /**Destructor, log the end time
    *
    */
   ~runLog() { logTime(6); }
 };
+
 /**Input operator to log information to the runLogFile_ for the given runLog,
  *will fail if runLog not started
  *
@@ -155,4 +166,5 @@ runLog& operator<<(runLog& rLog, const T& obj) {
   }
   return rLog;
 }
-}
+
+} // namespace cppprogutils

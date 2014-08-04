@@ -36,6 +36,7 @@ class programSetUp {
     // mess things up latter
     programName_ = replaceString(argv[0], "./", "");
   }
+
   /**@brief Construct the setUp with the commandLineArguments class converted
 *from argc and argv
    *
@@ -54,6 +55,7 @@ class programSetUp {
       programName_ = progSearch->second;
     }
   }
+
   /**@brief Construct the setUp with a map of string pairs converted from argc
 *and argv
    *
@@ -74,6 +76,7 @@ class programSetUp {
   }
 
   virtual ~programSetUp() {}
+
   // members
   // map to hold the commands
   /**@brief A commandLineArguments class to store the objects and help with flag
@@ -81,6 +84,7 @@ class programSetUp {
    *
    */
   commandLineArguments commands_;
+
   /**@brief A std::chrono::time_point object to store the start of the program
    *so run time can be logged
    *
@@ -94,6 +98,7 @@ class programSetUp {
    *
    */
   VecStr validOptions_;
+
   /**@brief A vector of strings of warnings to be printed at the end of setUp
    *
    */
@@ -104,30 +109,36 @@ class programSetUp {
    *
    */
   bool failed_ = false;
+
   // for outputting
   /**@brief The maximum width to allow for messages
    *
    */
   uint32_t width_ = 80;
+
   /**@brief The indent amount for wrapping messages
    *
    */
   uint32_t indent_ = 4;
+
   // parameters for logging
   /**@brief A container for parameters set during set up, see parametersHolder
    *for more details
    *
    */
   parametersHolder pars_;
+
   /**@brief The name of the program associated with the current setUp object
    *
    */
   std::string programName_;
+
   /**@brief A runLog object for optional logging of run time info, won't be
    *started unless programSetUp::startARunLog is called
    *
    */
   runLog rLog_;
+
   /**@brief A function to start a runLog in the named directory
    * @param dirName The name of the directory to start the runLog, runLog name
    *will be runLog_[NAME_OF_PROGRAM]
@@ -139,6 +150,7 @@ class programSetUp {
         start_);
     rLog_.startRunLog(commands_.arguments_);
   }
+
   /**@brief A function to write info on the parameters set during the set up
    * process
    * @param fileName The name of the parameter
@@ -155,6 +167,7 @@ class programSetUp {
     parameterFile << commands_.commandLine_ << std::endl;
     pars_.outputParsFile(parameterFile);
   }
+
   // check for valid commands
   /**@brief Called at the end of set up to look for any invalid options but
    *comparing current arguments to validOptions_
@@ -179,6 +192,7 @@ class programSetUp {
       }
     }
   }
+
   /**@brief Print any warnings incurred during set up to out
    * @param out The std::ostream out object to print to
    *
@@ -188,6 +202,7 @@ class programSetUp {
       out << warn << std::endl;
     }
   }
+
   /**@brief Print flags but looking at validOptions_ so needs to be called at
    * the end of set up so that options can be placed into validOptions_
    * @param out The std::ostream out object to print to
@@ -198,6 +213,7 @@ class programSetUp {
       out << flag << std::endl;
     }
   }
+
   /**@brief Once all options have been looked for call finishSetUp() so that any
    *warnings or help messages can be print and to find out if set up was
    *successful
@@ -262,6 +278,7 @@ class programSetUp {
     }
     return found;
   }
+
   /**@brief A templated function to look for options and implementation for
    *setting the option is handled by commandLineArguments so look there for more
    *details
@@ -307,6 +324,7 @@ class programSetUp {
     }
     return found;
   }
+
   // flag processing
  protected:
   /**@brief Function to process current flag to handle multiple flags being
@@ -328,6 +346,7 @@ class programSetUp {
                std::chrono::high_resolution_clock::now() - start_).count() /
            static_cast<double>(std::chrono::high_resolution_clock::period::den);
   }
+
   /**@brief Get a string formated run time in seconds rounded to the nearest
    * hundreth
    * @return A string wiht run time formated to tell time for hrs, minutes,
@@ -336,6 +355,7 @@ class programSetUp {
   std::string getRunTime() {
     return "(" + getTimeFormat(getRunTimeInSecs(), true, 2) + ")";
   }
+
   /**@brief Function to log the run time to a std::ostream
    * @param out The std::ostream to log the info to
    */
@@ -343,6 +363,7 @@ class programSetUp {
     out << getRunTime() << std::endl;
     return;
   }
+
   /**@brief A function to find out if help is need or required, called with a
    * minimum arguments parameter to indicated the num of args to print out if no
    * help flag is indicated
@@ -356,6 +377,7 @@ class programSetUp {
             commands_.containsFlagCaseInsensitive("-h") ||
             commands_.numberOfCommands() <= minAmountOfArgs);
   }
+
   /**@brief A Function to print out all the current arguments in an organized
    *table
    * @param commandLineArgumentsMap A map of strings pairs of the current
@@ -378,4 +400,5 @@ class programSetUp {
     printTableOrganized(content, columnNames, out);
   }
 };
+
 }  // namespace cppprogutils
