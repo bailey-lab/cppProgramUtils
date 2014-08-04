@@ -124,7 +124,7 @@ public:
   /**@brief A function to write info on the parameters set during the set up process
    * @param fileName The name of the parameter
    * @param overWrite A bool indicating whether to overwrite any file with that name
-   * @param failonWriteFailure A bool whether to exit if the parameters file couldn't be written
+   * @param failOnWriteFailure A bool whether to exit if the parameters file couldn't be written
    */
   void writeParametersFile(const std::string &fileName, bool overWrite,
                            bool failOnWriteFailure) {
