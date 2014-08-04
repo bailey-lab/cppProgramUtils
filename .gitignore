@@ -21,4 +21,5 @@
 *.app
 
 test/*
+man/*
 Makefile

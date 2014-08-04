@@ -9,12 +9,28 @@
 
 #include "cppprogutils/programRunner.hpp"
 namespace cppprogutils {
-
+/**@brief A master runner to rule all sub-runners to package all sub-runners into one place
+ *
+ * Inherits from programRunner which is what it stores as it's sub-runners, see programRunner for more details about batching and other various class aspects
+ *
+ *
+ */
 class oneRing : public programRunner {
 
+	/**@brief A map of key sub of sub-runner and value sub-runner
+	 *
+	 */
   const std::map<std::string, programRunner> rings_;
 
  protected:
+  /**@brief Function to added a sub-runner, used in construtor
+   *
+   * @param runner A programRunner to bring under the rule of the current oneRing program
+   * @param lower A bool of whether or not to store the sub-runner's title as lower case making look up case-insenstive
+   * @return Returns a pair of string , programRunner to added ot the rings_ class member
+   *
+   *
+   */
   std::pair<std::string, programRunner> addRing(programRunner runner,
                                                 bool lower = true) {
     auto name = runner.nameOfProgram_;
@@ -27,16 +43,24 @@ class oneRing : public programRunner {
   void listCommands(std::ostream &out) {}
 
  public:
+  /**@brief Constructor with a map of sub-runners and any sub-programs of current oneRing master runner
+   *
+   */
   oneRing(std::map<std::string, programRunner> rings,
           std::map<std::string, funcInfo> cmdToFunc, std::string nameOfProgram)
       : programRunner(cmdToFunc, nameOfProgram), rings_(rings) {}
 
   virtual ~oneRing() {};
+  /**@brief Run the program by searching sub-runners and all sub-programs defined in current oneRing program
+   *
+   * @param inputCommands A map of string pairs of arguments to run a sub-runner
+   *
+   */
   virtual int runProgram(MapStrStr inputCommands) const {
     std::string prog = inputCommands["-program"];
     if (containsProgram(prog)) {
       const auto &fi = cmdToFunc_.at(prog);
-      return fi.func(inputCommands);
+      return fi.func_(inputCommands);
     }
 
     // If given as PROGRAM_NUM will run the PROGRAM's NUM command
@@ -55,28 +79,27 @@ class oneRing : public programRunner {
         }
       }
     }
+    //if program is the number of one of the rings, list the program for that ring
     if (rings_.find(prog) != rings_.end()) {
       rings_.at(prog).listPrograms(std::cout, "", "none");
       return 1;
     }
-    std::pair<std::string, int> closestProgram = {"", 0};
+    // now try to find program in one of the rings
     for (auto &ring : rings_) {
       if (ring.second.containsProgram(prog)) {
         return ring.second.runProgram(inputCommands);
-      } else {
-        std::pair<std::string, int> currentClosestProgram =
-            ring.second.closestProgram(prog);
-        if (currentClosestProgram.second > closestProgram.second) {
-          closestProgram = currentClosestProgram;
-        }
       }
     }
     listPrograms(std::cout, inputCommands["-program"]);
-    std::cout << "Input command " << prog << std::endl;
-    std::cout << "Did you mean  " << closestProgram.first << "?" << std::endl;
     return 1;
   }
-
+  /**@brief List the programs listed in all sub-runner
+   *
+   * @param out The std::ostream object to print the info to
+   * @param command A command to compare to all stored commands to find the closest one
+   * @param nameOfProgram The name of the current program, if it doesn't equal the name of current program it is assumed another program is calling this function
+   *
+   */
   virtual void listPrograms(std::ostream &out, const std::string &command = "",
                             const std::string &nameOfProgram = "oneRing")
       const {
@@ -91,6 +114,19 @@ class oneRing : public programRunner {
 
     for (auto &ring : rings_) {
       ring.second.listPrograms(std::cout, "", nameOfProgram);
+    }
+    if (command != "") {
+      out << "Unrecognized command " << command << std::endl;
+      std::pair<std::string, int> closestProgram = {"", 0};
+      for (auto &ring : rings_) {
+        std::pair<std::string, int> currentClosestProgram =
+            ring.second.closestProgram(command);
+        if (currentClosestProgram.second > closestProgram.second) {
+          closestProgram = currentClosestProgram;
+        }
+      }
+      std::cout << "Input command " << command << std::endl;
+      std::cout << "Did you mean  " << closestProgram.first << "?" << std::endl;
     }
   }
 };
