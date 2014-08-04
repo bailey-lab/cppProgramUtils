@@ -144,11 +144,13 @@ class runLog {
     }
   }
 
-  /**Destructor, log the end time
+  /**Destructor, log the end time if a runLog is open
    *
    */
   ~runLog() {
-  	logTime(6);
+  	if(runLogFile_.is_open()){
+  		logTime(6);
+  	}
   }
 };
 
