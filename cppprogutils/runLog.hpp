@@ -137,7 +137,9 @@ class runLog {
   /**Destructor, log the end time
    *
    */
-  ~runLog() { logTime(6); }
+  ~runLog() {
+  	logTime(6);
+  }
 };
 /**Input operator to log information to the runLogFile_ for the given runLog,
  *will fail if runLog not started
