@@ -42,7 +42,8 @@ class parameter {
       defaultOrCommandline_ = "default";
     }
   }
-  /** Templated constructor for numeric types or anything that can be converted by to_string
+  /** Templated constructor for numeric types or anything that can be converted
+   *by to_string
    *
    */
   template <typename T>
@@ -69,7 +70,8 @@ class parameter {
    */
   std::string defaultOrCommandline_;
   /**Output members in a delimited string
-   * @param header Whether to get the header for the output information, default false
+   * @param header Whether to get the header for the output information, default
+   *false
    *
    * @return A tab delimited string of the information stored or the header
    */
@@ -87,9 +89,9 @@ class parameter {
 class parametersHolder {
 
  public:
-	/** Default constructor for an empty holder
-	 *
-	 */
+  /** Default constructor for an empty holder
+   *
+   */
   parametersHolder() {}
   /**Constructor by giving the first parameter
    *
@@ -114,7 +116,8 @@ class parametersHolder {
    *
    * @param parName Name of parameter
    * @param inValue The parameter value
-   * @param commandLine Bool, true if set at the command line, false if it is the default value
+   * @param commandLine Bool, true if set at the command line, false if it is
+   *the default value
    */
   template <typename T>
   void addParameter(const std::string& parName, const T& inValue,

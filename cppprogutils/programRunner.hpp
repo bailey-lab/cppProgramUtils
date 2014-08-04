@@ -11,18 +11,19 @@
 #include "cppprogutils/programSetUp.hpp"
 namespace cppprogutils {
 
-/**@brief programRunner class for running several subprograms stored in a map of function objects
+/**@brief programRunner class for running several subprograms stored in a map of
+ *function objects
  *
  */
 class programRunner {
  protected:
-	/**@brief funcInfo struct that holds
-	 *
-	 */
+  /**@brief funcInfo struct that holds
+   *
+   */
   struct funcInfo {
-  	/**@brief A std::func object holding the function call of the sub program
-  	 *
-  	 */
+    /**@brief A std::func object holding the function call of the sub program
+     *
+     */
     std::function<int(MapStrStr)> func_;
     /**@brief The title of the stored program
      *
@@ -33,9 +34,11 @@ class programRunner {
      */
     bool alias_;
   };
-  /**@brief A map of key being function name and a funcInfo struct, see funcInfo for more info
+  /**@brief A map of key being function name and a funcInfo struct, see funcInfo
+   *for more info
    *
-   * This needs to be initialized with the desired subprograms in order for them to be able to be called
+   * This needs to be initialized with the desired subprograms in order for them
+   *to be able to be called
    *
    */
   const std::map<std::string, funcInfo> cmdToFunc_;
@@ -45,7 +48,8 @@ class programRunner {
    *
    */
   const std::string nameOfProgram_;
-  /**Constructor with map of funcInfo structs holding the sub programs and the name of the master program
+  /**Constructor with map of funcInfo structs holding the sub programs and the
+   *name of the master program
    *
    */
   programRunner(std::map<std::string, funcInfo> cmdToFunc,
@@ -53,7 +57,8 @@ class programRunner {
       : cmdToFunc_(cmdToFunc), nameOfProgram_(nameOfProgram) {}
 
   virtual ~programRunner() {}
-  /**@brief Run one of the subprogram with given arguments stored in argv if master program contains it
+  /**@brief Run one of the subprogram with given arguments stored in argv if
+   *master program contains it
    *
    * Checks to see if a batch of commands is desired
    *
@@ -75,11 +80,11 @@ class programRunner {
     commands["-commandline"] = commandLine.str();
 
     if (commands["-program"] == "massrunwithending" ||
-    		commands["-program"] == "batch") {
+        commands["-program"] == "batch") {
       return massRunWithEnding(commands);
     }
     if (commands["-program"] == "massrunwithendingthreaded" ||
-    		commands["-program"] == "batchthreaded") {
+        commands["-program"] == "batchthreaded") {
       return massRunWithEndingThreaded(commands);
     }
     if (stringContainsAllDigits(commands["-program"])) {
@@ -87,9 +92,11 @@ class programRunner {
     }
     return runProgram(commands);
   }
-  /** @brief Give a map of string string pairs of arguments for the program runing
+  /** @brief Give a map of string string pairs of arguments for the program
+   *runing
    *
-   * @param inputCommands A map of string pairs, key is flag and value is flag associated value
+   * @param inputCommands A map of string pairs, key is flag and value is flag
+   *associated value
    * @return An int indicating succes of running the program
    */
   virtual int runProgram(MapStrStr inputCommands) const {
@@ -106,17 +113,20 @@ class programRunner {
    * @return int indicating success of all programs
    */
   virtual int runProgram(std::vector<MapStrStr> inputCommands) const {
-  	int status = 0;
-  	for(const auto & com : inputCommands){
-  		status = runProgram(com);
-  	}
+    int status = 0;
+    for (const auto &com : inputCommands) {
+      status = runProgram(com);
+    }
     return status;
   }
-  /**@brief List the contained subprograms and if given with a command option, print the closest sub-program
+  /**@brief List the contained subprograms and if given with a command option,
+   *print the closest sub-program
    *
    * @param out The std::ostream object to print the info to
-   * @param command If this is not blank it indicates that an unrecognized command was found making listPrograms() print the closest subprogram
-   * @param nameOfProgram If this does not equal the name of current program it means another program called it
+   * @param command If this is not blank it indicates that an unrecognized
+   *command was found making listPrograms() print the closest subprogram
+   * @param nameOfProgram If this does not equal the name of current program it
+   *means another program called it
    *
    */
   virtual void listPrograms(std::ostream &out, const std::string &command = "",
@@ -130,7 +140,7 @@ class programRunner {
       out << "Commands are not case sensitive" << std::endl;
       listCommands(out);
       if (command != "") {
-      	auto closet = closestProgram(command);
+        auto closet = closestProgram(command);
         out << "Unrecognized command " << command << std::endl;
         out << "Did you mean         " << closet.first << "?" << std::endl;
       }
@@ -138,16 +148,18 @@ class programRunner {
       out << nameOfProgram_ << std::endl;
       listCommands(out);
     }
-
   }
-  /**@brief A function to check to see if current program contains the sub-program
+  /**@brief A function to check to see if current program contains the
+   *sub-program
    *
    * @param program Name of subprogram to search for
    */
   virtual bool containsProgram(const std::string &program) const {
     return cmdToFunc_.find(program) != cmdToFunc_.end();
   }
-  /** @brief A function to find closest matching sub-program, done by giving the program with the highest global alignment score to the input parameter program
+  /** @brief A function to find closest matching sub-program, done by giving the
+   *program with the highest global alignment score to the input parameter
+   *program
    *
    * @param program The program to compare to the sub-programs
    */
@@ -162,9 +174,11 @@ class programRunner {
     }
     return ans;
   }
-  /**@brief A function to run a subprogram with same parameters but on all files with a certain file extention
+  /**@brief A function to run a subprogram with same parameters but on all files
+   *with a certain file extention
    *
-   * @param inputCommands A map of string pairs with argument and flag pairs, should contain -ending for file extention and -run for subprogram to run
+   * @param inputCommands A map of string pairs with argument and flag pairs,
+   *should contain -ending for file extention and -run for subprogram to run
    * @return int indicating run success
    *
    */
@@ -244,9 +258,12 @@ class programRunner {
     setUp.logRunTime(std::cout);
     return 0;
   }
-  /**@brief A function to run a subprogram with same parameters but on all files with a certain file extention
+  /**@brief A function to run a subprogram with same parameters but on all files
+   *with a certain file extention
    *
-   * @param inputCommands A map of string pairs with argument and flag pairs, should contain -ending for file extention and -run for subprogram to run and -numThreads for number of threads
+   * @param inputCommands A map of string pairs with argument and flag pairs,
+   *should contain -ending for file extention and -run for subprogram to run and
+   *-numThreads for number of threads
    * @return int indicating run success
    *
    */
@@ -335,19 +352,19 @@ class programRunner {
     }
     std::vector<std::vector<MapStrStr>> splitCommands(numThreads);
     uint32_t comPos = 0;
-    while(comPos < allCommands.size()){
-    	uint32_t tNum = 0;
-    	while(tNum < numThreads && comPos < allCommands.size()){
-    		splitCommands[tNum].emplace_back(allCommands[comPos]);
-    		++tNum;
-    		++comPos;
-    	}
+    while (comPos < allCommands.size()) {
+      uint32_t tNum = 0;
+      while (tNum < numThreads && comPos < allCommands.size()) {
+        splitCommands[tNum].emplace_back(allCommands[comPos]);
+        ++tNum;
+        ++comPos;
+      }
     }
     std::vector<std::thread> threads;
-    for(uint32_t t = 0; t < numThreads; ++t){
-    	threads.emplace_back(
-    	              std::thread([&](std::vector<MapStrStr> coms) { runProgram(coms); },
-    	              		splitCommands[t]));
+    for (uint32_t t = 0; t < numThreads; ++t) {
+      threads.emplace_back(
+          std::thread([&](std::vector<MapStrStr> coms) { runProgram(coms); },
+                      splitCommands[t]));
     }
     for (auto &t : threads) {
       t.join();
@@ -386,10 +403,14 @@ class programRunner {
   /**@brief A function to add the subprogram funcInfo struct
    *
    * @param title The name of the subprogram
-   * @param func The funcInfo struct containing the subprogram info, see funcInfo for more info
-   * @param alias A bool indicating if the title is an alias and shouldn't be printed, can be used to hide subprograms
-   * @param lower A bool whether the number should be changed to lower case for the check, default is true
-   * @return A pair of string, funcInfo for tile of subprogram and a funcInfo struct wiht subprogram info
+   * @param func The funcInfo struct containing the subprogram info, see
+   *funcInfo for more info
+   * @param alias A bool indicating if the title is an alias and shouldn't be
+   *printed, can be used to hide subprograms
+   * @param lower A bool whether the number should be changed to lower case for
+   *the check, default is true
+   * @return A pair of string, funcInfo for tile of subprogram and a funcInfo
+   *struct wiht subprogram info
    *
    */
   template <typename T>
@@ -410,8 +431,8 @@ class programRunner {
     for (const auto &e : cmdToFunc_) {
       if (!e.second.alias_) {
         ++count;
-        out << leftPadNumStr(count, cmdToFunc_.size()) << ") " << e.second.title_
-            << std::endl;
+        out << leftPadNumStr(count, cmdToFunc_.size()) << ") "
+            << e.second.title_ << std::endl;
       }
     }
   }

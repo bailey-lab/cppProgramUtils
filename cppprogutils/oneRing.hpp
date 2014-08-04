@@ -9,25 +9,30 @@
 
 #include "cppprogutils/programRunner.hpp"
 namespace cppprogutils {
-/**@brief A master runner to rule all sub-runners to package all sub-runners into one place
+/**@brief A master runner to rule all sub-runners to package all sub-runners
+ *into one place
  *
- * Inherits from programRunner which is what it stores as it's sub-runners, see programRunner for more details about batching and other various class aspects
+ * Inherits from programRunner which is what it stores as it's sub-runners, see
+ *programRunner for more details about batching and other various class aspects
  *
  *
  */
 class oneRing : public programRunner {
 
-	/**@brief A map of key sub of sub-runner and value sub-runner
-	 *
-	 */
+  /**@brief A map of key sub of sub-runner and value sub-runner
+   *
+   */
   const std::map<std::string, programRunner> rings_;
 
  protected:
   /**@brief Function to added a sub-runner, used in construtor
    *
-   * @param runner A programRunner to bring under the rule of the current oneRing program
-   * @param lower A bool of whether or not to store the sub-runner's title as lower case making look up case-insenstive
-   * @return Returns a pair of string , programRunner to added ot the rings_ class member
+   * @param runner A programRunner to bring under the rule of the current
+   *oneRing program
+   * @param lower A bool of whether or not to store the sub-runner's title as
+   *lower case making look up case-insenstive
+   * @return Returns a pair of string , programRunner to added ot the rings_
+   *class member
    *
    *
    */
@@ -43,7 +48,8 @@ class oneRing : public programRunner {
   void listCommands(std::ostream &out) {}
 
  public:
-  /**@brief Constructor with a map of sub-runners and any sub-programs of current oneRing master runner
+  /**@brief Constructor with a map of sub-runners and any sub-programs of
+   *current oneRing master runner
    *
    */
   oneRing(std::map<std::string, programRunner> rings,
@@ -51,7 +57,8 @@ class oneRing : public programRunner {
       : programRunner(cmdToFunc, nameOfProgram), rings_(rings) {}
 
   virtual ~oneRing() {};
-  /**@brief Run the program by searching sub-runners and all sub-programs defined in current oneRing program
+  /**@brief Run the program by searching sub-runners and all sub-programs
+   *defined in current oneRing program
    *
    * @param inputCommands A map of string pairs of arguments to run a sub-runner
    *
@@ -79,7 +86,8 @@ class oneRing : public programRunner {
         }
       }
     }
-    //if program is the number of one of the rings, list the program for that ring
+    // if program is the number of one of the rings, list the program for that
+    // ring
     if (rings_.find(prog) != rings_.end()) {
       rings_.at(prog).listPrograms(std::cout, "", "none");
       return 1;
@@ -96,8 +104,11 @@ class oneRing : public programRunner {
   /**@brief List the programs listed in all sub-runner
    *
    * @param out The std::ostream object to print the info to
-   * @param command A command to compare to all stored commands to find the closest one
-   * @param nameOfProgram The name of the current program, if it doesn't equal the name of current program it is assumed another program is calling this function
+   * @param command A command to compare to all stored commands to find the
+   *closest one
+   * @param nameOfProgram The name of the current program, if it doesn't equal
+   *the name of current program it is assumed another program is calling this
+   *function
    *
    */
   virtual void listPrograms(std::ostream &out, const std::string &command = "",
