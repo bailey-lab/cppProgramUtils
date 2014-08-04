@@ -152,6 +152,7 @@ public:
 	 *
 	 */
 	sch::time_point<sch::high_resolution_clock> start_;
+private:
 	/**@brief Current time for new lap, logging with the highest resolution available
 	 *
 	 */
@@ -165,10 +166,27 @@ public:
 	 *
 	 */
 	std::vector<std::pair<std::string, double>> lapTimes_;
+public:
 	//functions
+	/**@brief Get the current lap name
+	 *
+	 * @return the current lap name
+	 */
+	std::string getLapName()const{
+		return currentLapName_;
+	}
+	/**@brief Set the current lap name
+	 *
+	 * @param lapName the new name for the current lap name
+	 */
+	void setLapName(const std::string & lapName){
+		currentLapName_ = lapName;
+	}
+
 	/**@brief Get time in seconds since start
 	 * @return A double for time in seconds
 	 */
+
 	double totalTime(){
 		return getTimeDiff(start_);
 	}
@@ -218,6 +236,13 @@ public:
 			currentLapName_ = newLapName;
 		}
 		currentLap_ = timeNew;
+	}
+	/**@brief Determine if stopWatch has lap times
+	 *
+	 * @return return true if lap times were recordered and false if no lap times
+	 */
+	bool containsLapTimes()const{
+		return !lapTimes_.empty();
 	}
 
 	//output

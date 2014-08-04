@@ -61,7 +61,7 @@ class runLog {
    * @param str The name for the current lap
    */
   void setCurrentLapName(const std::string & str){
-  	timer_.currentLapName_ = str;
+  	timer_.setLapName(str);
   }
   /**@brief The std::ofstream object to log the info to
    *
@@ -153,7 +153,7 @@ class runLog {
   void logCurrentTime(const std::string & timeNewName = "",
   		uint32_t decPlaces = 6) {
     if (runLogFile_.is_open()) {
-    	runLogFile_ << timer_.currentLapName_ << " time: "
+    	runLogFile_ << timer_.getLapName() << " time: "
     			<< timer_.timeLapFormatted(decPlaces) << "\n";
       runLogFile_ << "total time: " << timer_.totalTimeFormatted(decPlaces)
       		<< "\n";
@@ -172,7 +172,7 @@ class runLog {
    */
   ~runLog() {
   	if(runLogFile_.is_open()){
-  		if(timer_.lapTimes_.empty()){
+  		if(!timer_.containsLapTimes()){
   			logTotalTime(6);
   		}else{
   			timer_.logLapTimes(runLogFile_, true, 6, true);
