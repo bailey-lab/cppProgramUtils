@@ -58,7 +58,7 @@ class runLog {
    *@param fileName The filename for the runLog
    */
   void setFilenameAndOpen(const std::string& fileName) {
-    if (runLogFile_) {
+    if (runLogFile_.is_open()) {
       std::cerr << "\033[1;31m";
       std::cerr << "in runLog.setFilenameAndOpen()\n";
       std::cerr << "Run log already started\n";
@@ -78,7 +78,7 @@ class runLog {
   void setFilenameAndOpen(
       const std::string& fileName,
       std::chrono::time_point<std::chrono::high_resolution_clock> start) {
-    if (runLogFile_) {
+    if (runLogFile_.is_open()) {
       std::cerr << "\033[1;31m";
       std::cerr << "in runLog.setFilenameAndOpen()\n";
       std::cerr << "Run log already started\n";
@@ -98,7 +98,7 @@ class runLog {
    *
    */
   void startRunLog(const MapStrStr& inputCommands) {
-    if (runLogFile_) {
+    if (runLogFile_.is_open()) {
       runLogFile_ << "Ran on " << getCurrentDate() << std::endl;
       auto commandlineArgs = inputCommands.find("-commandline");
       if (commandlineArgs != inputCommands.end()) {
@@ -117,7 +117,7 @@ class runLog {
    *
    */
   void logTime(uint32_t decPlaces = 6) {
-    if (runLogFile_) {
+    if (runLogFile_.is_open()) {
       runLogFile_
           << getTimeFormat(
                  std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -145,7 +145,7 @@ class runLog {
  */
 template <typename T>
 runLog& operator<<(runLog& rLog, const T& obj) {
-  if (rLog.runLogFile_) {
+  if (rLog.runLogFile_.is_open()) {
     rLog.runLogFile_ << obj;
   } else {
     std::cerr << "\033[1;31m";
