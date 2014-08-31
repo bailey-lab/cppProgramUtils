@@ -23,3 +23,11 @@
 test/*
 man/*
 Makefile
+
+*.pyc
+TAGS
+\#*
+.\#*
+*.fasta
+external/*
+
