@@ -131,7 +131,7 @@ class commandLineArguments {
    */
   bool lookForOption(int16_t& option, const std::string& flag) {
     if (containsFlagCaseInsensitive(flag)) {
-      option = std::stos(lowerCaseGetArguments(flag));
+      option = estd::stos(lowerCaseGetArguments(flag));
       return true;
     } else {
       return false;
@@ -185,7 +185,7 @@ class commandLineArguments {
    */
   bool lookForOption(uint16_t& option, const std::string& flag) {
     if (containsFlagCaseInsensitive(flag)) {
-      option = std::stous(lowerCaseGetArguments(flag));
+      option = estd::stous(lowerCaseGetArguments(flag));
       return true;
     } else {
       return false;
@@ -203,7 +203,7 @@ class commandLineArguments {
    */
   bool lookForOption(uint32_t& option, const std::string& flag) {
     if (containsFlagCaseInsensitive(flag)) {
-      option = std::stou(lowerCaseGetArguments(flag));
+      option = estd::stou(lowerCaseGetArguments(flag));
       return true;
     } else {
       return false;

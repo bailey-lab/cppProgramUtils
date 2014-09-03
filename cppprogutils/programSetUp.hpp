@@ -76,15 +76,14 @@ class programSetUp {
   virtual ~programSetUp() {}
 
   // members
-  // map to hold the commands
   /**@brief A commandLineArguments class to store the objects and help with flag
    *parsing, see commandLineArguments for more details
    *
    */
   commandLineArguments commands_;
 
-  /**@brief A std::chrono::time_point object to store the start of the program
-   *so run time can be logged
+  /**@brief A class using the std::chrono library to log infomration about run times
+   *
    *
    */
   stopWatch timer_;
