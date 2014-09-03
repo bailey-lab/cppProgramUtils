@@ -32,4 +32,5 @@ TAGS
 external/*
 bin/*
 build/*
+compfile.mk
 
