@@ -1,7 +1,7 @@
 #pragma once
 //
 //  programRunner.hpp
-//  sequenceTools
+//
 //
 //  Created by Nicholas Hathaway on 9/27/13.
 //  Copyright (c) 2013 Nicholas Hathaway. All rights reserved.
@@ -230,7 +230,7 @@ class programRunner {
       std::string from = toks[0];
       std::stringstream currentCommandLine;
       currentCommandLine << from << std::endl;
-      currentCommandLine << "sequenceTools " << currentCommands["-run"];
+      currentCommandLine << nameOfProgram_ <<  " " << currentCommands["-run"];
       currentCommands.erase("-run");
       for (auto &com : currentCommands) {
         if (com.first != "-commandline") {
@@ -325,7 +325,7 @@ class programRunner {
       std::string from = toks[0];
       std::stringstream currentCommandLine;
       currentCommandLine << from << std::endl;
-      currentCommandLine << "sequenceTools " << currentCommands["-run"];
+      currentCommandLine << nameOfProgram_ << " " << currentCommands["-run"];
       currentCommands.erase("-run");
       for (auto &com : currentCommands) {
         if (com.first != "-commandline") {
