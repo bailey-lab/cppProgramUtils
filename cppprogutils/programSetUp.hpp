@@ -11,6 +11,7 @@
 #include "cppprogutils/commandLineArguments.hpp"
 #include "cppprogutils/runLog.hpp"
 #include "cppprogutils/common.hpp"
+#include "cppprogutils/flag.hpp"
 
 namespace cppprogutils {
 
