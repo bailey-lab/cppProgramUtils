@@ -9,11 +9,19 @@
 #include "cppprogutils/common.hpp"
 namespace cppprogutils {
 
-template <typename NUM>
-std::string to_string(NUM number) {
-  std::stringstream tempStream;
-  tempStream << number;
-  return tempStream.str();
+template <typename T>
+std::string to_string(T obj) {
+  std::stringstream ss;
+  ss << obj;
+  return ss.str();
+}
+template <>
+std::string to_string<bool>(bool obj) {
+	if(obj){
+		return "true";
+	}else{
+		return "false";
+	}
 }
 
 template <typename T>

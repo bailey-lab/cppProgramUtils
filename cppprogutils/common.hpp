@@ -72,4 +72,45 @@ inline int16_t stos(const std::string& str, size_t* idx = 0, int base = 10) {
   }
   return static_cast<int16_t>(firstConverion);
 }
+
+
+template<class T>
+struct TypeName
+{
+static std::string get() { return T::typeName(); }
+};
+// add more specializations for the build-in types
+template<>
+std::string TypeName<int16_t>::get() {return "int16_t";}
+template<>
+std::string TypeName<int32_t>::get() {return "int32_t";}
+template<>
+std::string TypeName<int64_t>::get() {return "int64_t";}
+template<>
+std::string TypeName<uint16_t>::get() {return "uint16_t";}
+template<>
+std::string TypeName<uint32_t>::get() {return "uint32_t";}
+template<>
+std::string TypeName<uint64_t>::get() {return "uint64_t";}
+#ifndef __linux__
+template<>
+std::string TypeName<size_t>::get() {return "size_t";}
+#endif
+template<>
+std::string TypeName<bool>::get() {return "bool";}
+template<>
+std::string TypeName<double>::get() {return "double";}
+template<>
+std::string TypeName<long double>::get() {return "long double";}
+template<>
+std::string TypeName<float>::get() {return "float";}
+template<>
+std::string TypeName<std::string>::get() {return "string";}
+
+template<typename T>
+std::string getTypeName(const T & obj){
+	return TypeName<T>::get();
 }
+
+
+}  //namepsace estd

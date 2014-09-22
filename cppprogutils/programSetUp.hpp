@@ -9,8 +9,8 @@
 
 #include "cppprogutils/utils.h"
 #include "cppprogutils/commandLineArguments.hpp"
-#include "cppprogutils/parameter.hpp"
 #include "cppprogutils/runLog.hpp"
+#include "cppprogutils/common.hpp"
 
 namespace cppprogutils {
 
@@ -75,7 +75,6 @@ class programSetUp {
 
   virtual ~programSetUp() {}
 
-  // members
   /**@brief A commandLineArguments class to store the objects and help with flag
    *parsing, see commandLineArguments for more details
    *
@@ -89,12 +88,6 @@ class programSetUp {
   stopWatch timer_;
 
  protected:
-  // valid options
-  /**@brief A vector of strings of valid options to keep track of what is
-   *allowed for current setUp
-   *
-   */
-  VecStr validOptions_;
 
   /**@brief A vector of strings of warnings to be printed at the end of setUp
    *
@@ -107,7 +100,6 @@ class programSetUp {
    */
   bool failed_ = false;
 
-  // for outputting
   /**@brief The maximum width to allow for messages
    *
    */
@@ -118,12 +110,11 @@ class programSetUp {
    */
   uint32_t indent_ = 4;
 
-  // parameters for logging
   /**@brief A container for parameters set during set up, see parametersHolder
    *for more details
    *
    */
-  parametersHolder pars_;
+  flagHolder flags_;
 
   /**@brief The name of the program associated with the current setUp object
    *
@@ -162,26 +153,26 @@ class programSetUp {
     openTextFile(parameterFile, fileName, ".txt", overWrite,
                  failOnWriteFailure);
     parameterFile << commands_.commandLine_ << std::endl;
-    pars_.outputParsFile(parameterFile);
+    flags_.outputParsFile(parameterFile);
   }
 
-  // check for valid commands
+
   /**@brief Called at the end of set up to look for any invalid options but
    *comparing current arguments to validOptions_
    *
    */
   void lookForInvalidOptions() {
-    validOptions_.push_back("-program");
+  	VecStr currentFlags = getVectorOfMapKeys(flags_.flags_);
+  	currentFlags.push_back("-program");
     if (commands_.arguments_.find("-program") != commands_.arguments_.end()) {
-      validOptions_.push_back(commands_["-program"]);
+    	currentFlags.push_back(commands_["-program"]);
     }
-    validOptions_.push_back("-commandline");
-    changeStringVectorToLowerCase(validOptions_);
+    currentFlags.push_back("-commandline");
+    changeStringVectorToLowerCase(currentFlags);
     VecStr expandedOptions;
-    for (const auto &op : validOptions_) {
+    for (const auto &op : currentFlags) {
       addOtherVec(expandedOptions, tokenizeString(op, ","));
     }
-
     for (const auto &com : commands_.arguments_) {
       if (!vectorContains(expandedOptions, com.first)) {
         warnings_.emplace_back(
@@ -205,10 +196,11 @@ class programSetUp {
    * @param out The std::ostream out object to print to
    */
   void printFlags(std::ostream &out) {
-    std::sort(validOptions_.begin(), validOptions_.end());
-    for (const auto &flag : validOptions_) {
-      out << flag << std::endl;
+    std::map<std::string, std::string> infoOut;
+    for(const auto & f : flags_.flags_){
+    	infoOut[f.first] = f.second.helpInfo();
     }
+  	mapOutColAdjust(infoOut, out);
   }
 
   /**@brief Once all options have been looked for call finishSetUp() so that any
@@ -241,28 +233,24 @@ class programSetUp {
    * @return Returns true if option is found or false if option is not found
    *
    */
-  bool setBoolOptionFalse(bool &option, std::string flag,
-                          const std::string &parName, bool required = false) {
-    VecStr flagToks = processFlag(flag);
+  bool setBoolOptionFalse(bool &option, std::string flagStr,
+                          const std::string &shortDescription,
+                          bool required = false) {
+  	flag currentFlag =flag(option, flagStr,shortDescription, required);
     bool found = false;
-    validOptions_.push_back(flag);
-    for (const auto &t : flagToks) {
+    for (const auto &t : currentFlag.flags_) {
       if (commands_.lookForOptionFalse(option, t)) {
-        // option=true;
-        // validOptions_.push_back(t);
-        pars_.addParameter(parName, option, true);
+      	currentFlag.setValue(option);
         found = true;
         break;
-
       } else {
         found = false;
       }
     }
-
     if (required && !found) {
       std::stringstream tempStream;
       tempStream << boldBlackText("Need to have ")
-                 << boldText(vectorToString(tokenizeString(flag, ","), " or "),
+                 << boldText(vectorToString(tokenizeString(flagStr, ","), " or "),
                              "31")
                  << boldBlackText(" see ") +
                         boldText(commands_["-program"] + " -help ", "31") +
@@ -270,9 +258,7 @@ class programSetUp {
       warnings_.emplace_back(tempStream.str());
       failed_ = true;
     }
-    if (!found) {
-      pars_.addParameter(parName, option, false);
-    }
+    flags_.addFlag(currentFlag);
     return found;
   }
 
@@ -289,15 +275,14 @@ class programSetUp {
    *
    */
   template <typename T>
-  bool setOption(T &option, std::string flag, const std::string &parName,
+  bool setOption(T &option, std::string flagStr,
+  		const std::string &shortDescription,
                  bool required = false) {
-    VecStr flagToks = processFlag(flag);
-    validOptions_.emplace_back(flag);
+  	flag currentFlag =flag(option, flagStr,shortDescription, required);
     bool found = false;
-    for (const auto &fTok : flagToks) {
+    for (const auto &fTok : currentFlag.flags_) {
       if (commands_.lookForOption(option, fTok)) {
-        // validOptions_.push_back(fTok);
-        pars_.addParameter(parName, option, true);
+      	currentFlag.setValue(option);
         found = true;
         break;
       } else {
@@ -308,7 +293,7 @@ class programSetUp {
     if (required && !found) {
       std::stringstream tempStream;
       tempStream << boldBlackText("Need to have ")
-                 << boldText(vectorToString(tokenizeString(flag, ","), " or "),
+                 << boldText(vectorToString(tokenizeString(flagStr, ","), " or "),
                              "31")
                  << boldBlackText(" see ") +
                         boldText(commands_["-program"] + " -help ", "31") +
@@ -316,9 +301,7 @@ class programSetUp {
       warnings_.emplace_back(tempStream.str());
       failed_ = true;
     }
-    if (!found) {
-      pars_.addParameter(parName, option, false);
-    }
+    flags_.addFlag(currentFlag);
     return found;
   }
 
