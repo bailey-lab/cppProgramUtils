@@ -16,7 +16,7 @@ std::string to_string(T obj) {
   return ss.str();
 }
 template <>
-std::string to_string<bool>(bool obj) {
+inline std::string to_string<bool>(bool obj) {
 	if(obj){
 		return "true";
 	}else{
