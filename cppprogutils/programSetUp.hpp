@@ -223,7 +223,7 @@ class programSetUp {
     }
   }
 
-  // option setters, case insensitive for flags
+
   /**@brief Look for option and set the bool option to false if flag is found
    * @param option The bool option to set
    * @param flag The flag to be searched for
@@ -306,18 +306,6 @@ class programSetUp {
     return found;
   }
 
-  // flag processing
- protected:
-  /**@brief Function to process current flag to handle multiple flags being
-   * given
-   * @param flag The flag for current option, will be split on commas (,) so
-   * that multiple flags can be given for one option
-   * @return A string vector with the flags split on (,), if only one flag will
-   * be a vector of size of one
-   */
-  VecStr processFlag(std::string &flag) { return tokenizeString(flag, ","); }
-
- public:
   /**@brief Get the current run time since time point start_ in seconds
    * @return A double with the run time converted into seconds
    *
