@@ -201,6 +201,8 @@ class programSetUp {
     for(const auto & f : flags_.flags_){
     	infoOut[f.first] = f.second.helpInfo();
     }
+    infoOut["-flags,-getFlags"] = "Print flags";
+    infoOut["-h,-help"] = "Print help Mesage";
   	mapOutColAdjust(infoOut, out);
   }
 
@@ -212,7 +214,9 @@ class programSetUp {
    */
   void finishSetUp(std::ostream &out) {
     if (commands_.containsFlagCaseInsensitive("-getFlags") ||
-        commands_.containsFlagCaseInsensitive("-flags")) {
+        commands_.containsFlagCaseInsensitive("-flags") ||
+        commands_.containsFlagCaseInsensitive("-h") ||
+        commands_.containsFlagCaseInsensitive("-help")) {
       printFlags(out);
       exit(1);
     }
