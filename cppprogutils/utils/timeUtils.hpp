@@ -11,6 +11,7 @@
 #include "cppprogutils/utils/stringUtils.hpp"
 
 namespace cppprogutils {
+
 inline std::string getCurrentDate() {
   time_t t = time(0);  // get time now
   struct tm* now = localtime(&t);
@@ -245,7 +246,7 @@ public:
 		return !lapTimes_.empty();
 	}
 
-	//output
+
 	/**@brief Log the lap times to out in two columns separated by tab
 	 * @param out The std::ostream object to log the times to
 	 * @param formatted A bool whether the time should be

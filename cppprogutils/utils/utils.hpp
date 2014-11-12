@@ -42,7 +42,7 @@ void mapOutColAdjust(const MAP& theMap,
  * @return A vector of the mapped values
  */
 template <typename MAP>
-static std::vector<typename MAP::mapped_type> getVectorOfMapValues(const MAP& theMap) {
+static std::vector<typename MAP::mapped_type> getVecOfMapValues(const MAP& theMap) {
   std::vector<typename MAP::mapped_type> ret;
   for (const auto & mValue : theMap) {
     ret.push_back(mValue.second);
@@ -56,7 +56,7 @@ static std::vector<typename MAP::mapped_type> getVectorOfMapValues(const MAP& th
  * @return A vector of the key values
  */
 template <typename MAP>
-static std::vector<typename MAP::key_type> getVectorOfMapKeys(const MAP& theMap) {
+static std::vector<typename MAP::key_type> getVecOfMapKeys(const MAP& theMap) {
   std::vector<typename MAP::key_type> ret;
   for (const auto & mValue : theMap) {
     ret.push_back(mValue.first);
@@ -71,9 +71,9 @@ inline double roundDecPlaces(double num, int decPlaces) {
 }
 
 template <class T>
-void addOtherVec(std::vector<T>& reads, const std::vector<T>& otherVec) {
-  reads.reserve(reads.size() + otherVec.size());
-  reads.insert(reads.end(), otherVec.begin(), otherVec.end());
+void addOtherVec(std::vector<T>& vec, const std::vector<T>& otherVec) {
+  vec.reserve(vec.size() + otherVec.size());
+  vec.insert(vec.end(), otherVec.begin(), otherVec.end());
 }
 
 template <typename T>
@@ -88,77 +88,50 @@ bool vectorContains(const std::vector<T>& vec, const T& search) {
 
 
 
-// with no header
-inline void printTableOrganized(const std::vector<VecStr>& content,
-                                std::ostream& out) {
-  std::map<int, size_t> sizeMap;
-  for (const auto& contentIter : content) {
-    int count = 0;
-    for (const auto& lineIter : contentIter) {
-      if (sizeMap.find(count) == sizeMap.end()) {
-        sizeMap.insert(std::make_pair(count, lineIter.size()));
-      } else {
-        if (sizeMap[count] < lineIter.size()) {
-          sizeMap[count] = lineIter.size();
-        }
-      }
-      ++count;
-    }
-  }
-  for (const auto& contentIter : content) {
-    int count = 0;
-    for (const auto& lineIter : contentIter) {
-      out << std::setw((int)sizeMap[count]) << std::left << lineIter;
-      out << "\t";
-      ++count;
-    }
-    out << std::endl;
-  }
-}
 
 // with header
 inline void printTableOrganized(const std::vector<VecStr>& content,
                                 const VecStr& header, std::ostream& out) {
   std::map<int, size_t> sizeMap;
-  {
+  if(!header.empty()){
     int count = 0;
-    for (const auto& lineIter : header) {
+    for (const auto& h : header) {
       if (sizeMap.find(count) == sizeMap.end()) {
-        sizeMap.insert(std::make_pair(count, lineIter.size()));
+        sizeMap.insert(std::make_pair(count, h.size()));
       } else {
-        if (sizeMap[count] < lineIter.size()) {
-          sizeMap[count] = lineIter.size();
+        if (sizeMap[count] < h.size()) {
+          sizeMap[count] = h.size();
         }
       }
       ++count;
     }
   }
-  for (const auto& contentIter : content) {
+  for (const auto & row : content) {
     int count = 0;
-    for (const auto& lineIter : contentIter) {
+    for (const auto& col : row) {
       if (sizeMap.find(count) == sizeMap.end()) {
-        sizeMap.insert(std::make_pair(count, lineIter.size()));
+        sizeMap.insert(std::make_pair(count, col.size()));
       } else {
-        if (sizeMap[count] < lineIter.size()) {
-          sizeMap[count] = lineIter.size();
+        if (sizeMap[count] < col.size()) {
+          sizeMap[count] = col.size();
         }
       }
       ++count;
     }
   }
-  {
+  if(!header.empty()){
     int count = 0;
-    for (const auto& lineIter : header) {
-      out << std::setw((int)sizeMap[count]) << std::left << lineIter;
+    for (const auto& h : header) {
+      out << std::setw(sizeMap[count]) << std::left << h;
       out << "\t";
       ++count;
     }
     out << std::endl;
   }
-  for (const auto& contentIter : content) {
+  for (const auto& row : content) {
     int count = 0;
-    for (const auto& lineIter : contentIter) {
-      out << std::setw((int)sizeMap[count]) << std::left << lineIter;
+    for (const auto& col : row) {
+      out << std::setw(sizeMap[count]) << std::left << col;
       out << "\t";
       ++count;
     }

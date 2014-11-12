@@ -54,7 +54,6 @@ inline bool fexists(const std::string& filename) {
 
 inline void openTextFile(std::ofstream& file, std::string filename,
                          bool overWrite, bool append, bool exitOnFailure) {
-  // std::ofstream file;
   if (fexists(filename) && !overWrite) {
     if (append) {
       file.open(filename.data(), std::ios::app);
@@ -64,7 +63,6 @@ inline void openTextFile(std::ofstream& file, std::string filename,
         exit(1);
       }
     }
-
   } else {
     file.open(filename.data());
     if (!file) {
@@ -73,13 +71,12 @@ inline void openTextFile(std::ofstream& file, std::string filename,
         exit(1);
       }
     } else {
-      // chmod(filename.c_str(), S_IRWU|S_IRGRP|S_IWGRP|S_IROTH);
       chmod(filename.c_str(),
-            S_IWUSR | S_IRUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-      // chmod(filename.c_str(), S_IRWXU|S_IRGRP|S_IXGRP|S_IWGRP|S_IROTH);
+            S_IWUSR | S_IRUSR | S_IRGRP | S_IWGRP | S_IROTH);
     }
   }
 }
+
 inline int getdir(const std::string& dir,
                   std::map<std::string, std::pair<std::string, bool>>& files) {
   DIR* dp;

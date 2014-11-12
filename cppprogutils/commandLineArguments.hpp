@@ -51,12 +51,12 @@ class commandLineArguments {
 
  private:
   std::string& lowerCaseGetArguments(const std::string& str) {
-    if (arguments_[stringToLowerReturn(str)] == "") {
+    if (arguments_[strToLowerRet(str)] == "") {
       std::cout << "Argument " << str
                 << " requires an option but none was given" << std::endl;
       exit(1);
     }
-    return arguments_[stringToLowerReturn(str)];
+    return arguments_[strToLowerRet(str)];
   }
 
  public:
@@ -322,7 +322,7 @@ class commandLineArguments {
    * @return Bool, true if flag is present or false if flag is absent
    */
   bool containsFlagCaseInsensitive(const std::string& flag) {
-    if (arguments_.find(stringToLowerReturn(flag)) != arguments_.end()) {
+    if (arguments_.find(strToLowerRet(flag)) != arguments_.end()) {
       return true;
     } else {
       return false;
@@ -373,10 +373,10 @@ class commandLineArguments {
           exit(1);
         } else {
           VecStr toks = tokenizeString(nextParamRaw, "=");
-          storage.insert(std::make_pair(stringToLowerReturn(toks[0]), toks[1]));
+          storage.insert(std::make_pair(strToLowerRet(toks[0]), toks[1]));
         }
       } else {
-        std::string nextParam = stringToLowerReturn(argv[i]);
+        std::string nextParam = strToLowerRet(argv[i]);
         if (storage.find(nextParam) != storage.end()) {
           std::cout << "Error, already have " << nextParam << std::endl;
           std::cout << "Check if you entered it in twice" << std::endl;
@@ -385,18 +385,18 @@ class commandLineArguments {
 
         if (argv[i][0] == '-') {
           if (i + 1 >= argc) {
-            storage.insert(std::make_pair(stringToLowerReturn(argv[i]), ""));
+            storage.insert(std::make_pair(strToLowerRet(argv[i]), ""));
           } else {
             if (argv[i + 1][0] == '-') {
-              storage.insert(std::make_pair(stringToLowerReturn(argv[i]), ""));
+              storage.insert(std::make_pair(strToLowerRet(argv[i]), ""));
             } else {
               storage.insert(
-                  std::make_pair(stringToLowerReturn(argv[i]), argv[i + 1]));
+                  std::make_pair(strToLowerRet(argv[i]), argv[i + 1]));
               ++i;
             }
           }
         } else {
-          storage.insert(std::make_pair(stringToLowerReturn(argv[i]), ""));
+          storage.insert(std::make_pair(strToLowerRet(argv[i]), ""));
         }
       }
     }

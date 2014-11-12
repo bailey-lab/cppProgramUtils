@@ -76,7 +76,7 @@ class programRunner {
     commandLineArguments::logRunArgumnets(commandLine, argc, argv);
     MapStrStr commands =
         commandLineArguments::convertCommandLineArguments(argc, argv);
-    commands["-program"] = stringToLowerReturn(argv[1]);
+    commands["-program"] = strToLowerRet(argv[1]);
     commands["-commandline"] = commandLine.str();
 
     if (commands["-program"] == "massrunwithending" ||
@@ -87,7 +87,7 @@ class programRunner {
         commands["-program"] == "batchthreaded") {
       return massRunWithEndingThreaded(commands);
     }
-    if (stringContainsAllDigits(commands["-program"])) {
+    if (strAllDigits(commands["-program"])) {
       return runByNumber(commands["-program"], commands);
     }
     return runProgram(commands);
@@ -242,7 +242,7 @@ class programRunner {
       // other one.
       currentCommands["-commandline"] = currentCommandLine.str();
       // set the program to be run
-      currentCommands["-program"] = stringToLowerReturn(program);
+      currentCommands["-program"] = strToLowerRet(program);
       // log current run command
       std::cout << currentCommands["-commandline"] << std::endl;
       runLog << currentCommands["-commandline"] << std::endl;
@@ -337,7 +337,7 @@ class programRunner {
       // other one.
       currentCommands["-commandline"] = currentCommandLine.str();
       // set the program to be run
-      currentCommands["-program"] = stringToLowerReturn(program);
+      currentCommands["-program"] = strToLowerRet(program);
       // log current run command
       std::cout << currentCommands["-commandline"] << std::endl;
       // runLog << currentCommands["-commandline"] << std::endl;
@@ -375,7 +375,7 @@ class programRunner {
   }
 
   int runByNumber(std::string numStr, MapStrStr inputCommands) const {
-    if (stringContainsAllDigits(numStr)) {
+    if (strAllDigits(numStr)) {
       return runByNumber(std::stoi(numStr), inputCommands);
     }
     std::cout << "NumStr isn't a number: " << numStr << std::endl;
@@ -418,7 +418,7 @@ class programRunner {
                                            bool alias, bool lower = true) {
     auto name = title;
     if (lower) {
-      stringToLower(name);
+      strToLower(name);
     }
     return {name, {std::bind(&func, std::placeholders::_1), title, alias}};
   }

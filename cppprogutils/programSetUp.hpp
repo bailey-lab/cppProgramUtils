@@ -169,7 +169,7 @@ class programSetUp {
     	currentFlags.push_back(commands_["-program"]);
     }
     currentFlags.push_back("-commandline");
-    changeStringVectorToLowerCase(currentFlags);
+    strVecToLower(currentFlags);
     VecStr expandedOptions;
     for (const auto &op : currentFlags) {
       addOtherVec(expandedOptions, tokenizeString(op, ","));

@@ -40,7 +40,7 @@ class oneRing : public programRunner {
                                                 bool lower = true) {
     auto name = runner.nameOfProgram_;
     if (lower) {
-      stringToLower(name);
+      strToLower(name);
     }
     return {name, runner};
   }
@@ -78,7 +78,7 @@ class oneRing : public programRunner {
       if (toks.size() == 2) {
         progName = toks[0];
         progNumber = toks[1];
-        if (stringContainsAllDigits(progNumber)) {
+        if (strAllDigits(progNumber)) {
           // inputCommands.erase(prog);
           if (rings_.find(progName) != rings_.end()) {
             return rings_.at(progName).runByNumber(progNumber, inputCommands);

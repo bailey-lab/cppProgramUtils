@@ -36,7 +36,7 @@ std::string leftPadNumStr(T num, T highestNumber = 10) {
   return ans.str();
 }
 
-inline std::string convertBoolToString(bool convert) {
+inline std::string boolToStr(bool convert) {
   if (convert) {
     return "true";
   } else {
@@ -44,33 +44,31 @@ inline std::string convertBoolToString(bool convert) {
   }
 }
 
-
-
-inline void stringToUpper(std::string& str) {
+inline void strToUpper(std::string& str) {
   for (auto& c : str) {
     c = toupper(c);
   }
 }
 
-inline void stringToLower(std::string& str) {
+inline void strToLower(std::string& str) {
   for (auto& c : str) {
     c = tolower(c);
   }
 }
 
-inline std::string stringToUpperReturn(std::string str) {
-  stringToUpper(str);
+inline std::string strToUpperRet(std::string str) {
+  strToUpper(str);
   return str;
 }
 
-inline std::string stringToLowerReturn(std::string str) {
-  stringToLower(str);
+inline std::string strToLowerRet(std::string str) {
+  strToLower(str);
   return str;
 }
 
-inline void changeStringVectorToLowerCase(VecStr& vec) {
+inline void strVecToLower(VecStr& vec) {
   for (auto& v : vec) {
-    stringToLower(v);
+    strToLower(v);
   }
 }
 
@@ -91,36 +89,36 @@ std::string vectorToString(const std::vector<T>& vectorToConvert,
 inline std::vector<std::string> tokenizeString(const std::string& str,
                                                const std::string& delim,
                                                bool addEmptyToEnd = false) {
-  std::vector<std::string> output;
+  std::vector<std::string> ret;
   if ("whitespace" == delim) {
-    std::stringstream tempStream(str);
-    while (!tempStream.eof()) {
-      std::string tempName;
-      tempStream >> tempName;
-      output.emplace_back(tempName);
+    std::stringstream ss(str);
+    while (!ss.eof()) {
+      std::string tempStr;
+      ss >> tempStr;
+      ret.emplace_back(tempStr);
     }
   } else {
-    if (str.find(delim.c_str()) == std::string::npos) {
-      output.push_back(str);
+    if (str.find(delim) == std::string::npos) {
+      ret.push_back(str);
     } else {
       std::size_t pos = str.find(delim, 0);
       std::size_t oldPos = -delim.size();
       while (pos != std::string::npos) {
-        output.push_back(
+        ret.emplace_back(
             str.substr(oldPos + delim.size(), pos - oldPos - delim.size()));
         oldPos = pos;
         pos = str.find(delim, pos + 1);
       }
       if (oldPos + delim.size() == str.size()) {
         if (addEmptyToEnd) {
-          output.push_back("");
+          ret.emplace_back("");
         }
       } else {
-        output.push_back(str.substr(oldPos + delim.size(), str.size() - 1));
+        ret.emplace_back(str.substr(oldPos + delim.size(), str.size() - 1));
       }
     }
   }
-  return output;
+  return ret;
 }
 
 inline bool containsSubString(const std::string& str,
@@ -128,7 +126,7 @@ inline bool containsSubString(const std::string& str,
   return (str.find(subString) != std::string::npos);
 }
 
-inline bool stringContainsAllDigits(const std::string& str) {
+inline bool strAllDigits(const std::string& str) {
   for (const auto& c : str) {
     if (!isdigit(c)) {
       return false;
