@@ -163,7 +163,7 @@ class programSetUp {
    *
    */
   void lookForInvalidOptions() {
-  	VecStr currentFlags = getVectorOfMapKeys(flags_.flags_);
+  	VecStr currentFlags = getVecOfMapKeys(flags_.flags_);
   	currentFlags.push_back("-program");
     if (commands_.arguments_.find("-program") != commands_.arguments_.end()) {
     	currentFlags.push_back(commands_["-program"]);
