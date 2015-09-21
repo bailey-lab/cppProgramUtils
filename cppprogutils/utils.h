@@ -12,5 +12,6 @@
 #include "cppprogutils/utils/filesystemUtils.hpp"
 #include "cppprogutils/utils/utils.hpp"
 #include "cppprogutils/utils/timeUtils.hpp"
+#include "cppprogutils/utils/textFormatter.hpp"
 
 

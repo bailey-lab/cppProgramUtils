@@ -52,29 +52,122 @@ inline bool fexists(const std::string& filename) {
   }
 }
 
-inline void openTextFile(std::ofstream& file, std::string filename,
+
+/**@brief  append to a str only if need
+ *
+ * @param str The string to append to
+ * @param app What to append to str
+ * @return A reference to the str
+ */
+inline std::string & appendAsNeeded(std::string & str, const std::string & app){
+	if(!endsWith(str,app)){
+		str.append(app);
+
+	}
+	return str;
+}
+
+/**@brief Return str appended if required
+ *
+ * @param str The str to append to
+ * @param app What to append to the str
+ * @return str appended with app only if it is not already appended
+ */
+inline std::string appendAsNeededRet(std::string str, const std::string & app){
+	if(!endsWith(str,app)){
+		str.append(app);
+	}
+	return str;
+}
+
+/**@brief Joiningng parent path with child path with a unix dir separator if needed
+ *
+ * Modeled after python's os.path.join
+ *
+ * @param par A parent path
+ * @param child A file under parent path
+ * @return Return par plus a unix directory separator if neccesary plus child
+ */
+inline std::string join(const std::string & par, const std::string & child){
+	return appendAsNeededRet(par, "/") + child;
+}
+
+/**@brief Open a ofstream with filename and checking for file existence
+ *
+ * @param file the ofstream object to open
+ * @param filename The name of the file to open
+ * @param overWrite Whether the file should be overwritten if it already exists
+ * @param append Whether the file should be appended if it already exists
+ * @param exitOnFailure whether program should exit on failure to open the file
+ * @todo probably should just remove exitOnFailure and throw an exception instead
+ */
+inline void openTextFile(std::ofstream& file, const std::string & filename,
                          bool overWrite, bool append, bool exitOnFailure) {
+
   if (fexists(filename) && !overWrite) {
     if (append) {
       file.open(filename.data(), std::ios::app);
     } else {
-      std::cout << filename << " already exists" << std::endl;
+    	std::stringstream ss;
+      ss << filename << " already exists";
       if (exitOnFailure) {
-        exit(1);
+        throw std::runtime_error{ss.str()};
+      }else{
+      	std::cout << ss.str() << std::endl;
       }
     }
   } else {
     file.open(filename.data());
     if (!file) {
-      std::cout << "Error in opening " << filename << std::endl;
+    	std::stringstream ss;
+    	ss << "Error in opening " << filename;
       if (exitOnFailure) {
-        exit(1);
+        throw std::runtime_error{ss.str()};
+      }else{
+      	std::cout << ss.str() << std::endl;
       }
     } else {
       chmod(filename.c_str(),
             S_IWUSR | S_IRUSR | S_IRGRP | S_IWGRP | S_IROTH);
     }
   }
+}
+
+/**@brief Open a ofstream with filename and checking for file existence
+ *
+ * @param file the ofstream object to open
+ * @param filename The name of the file to open
+ * @param overWrite Whether the file should be overwritten if it already exists
+ * @param append Whether the file should be appended if it already exists
+ * @param exitOnFailure whether program should exit on failure to open the file
+ * @todo probably should just remove exitOnFailure and throw an exception instead
+ */
+inline void openTextFile(std::ofstream& file, std::string filename, const std::string & extention,
+                         bool overWrite, bool append, bool exitOnFailure) {
+	appendAsNeeded(filename, extention);
+	openTextFile(file, filename, overWrite, append, exitOnFailure);
+}
+
+/**@brief Get the streambuf of either an opened file or of std::cout if outFile is empty
+ *
+ * @param outFile The ofstream to open if needed
+ * @param outFilename The name of the file, leave blank to get std::cout buffer
+ * @param outFileExt The extention for the file
+ * @param overWrite Whether to overwrite the file
+ * @param append Whether to append to the file
+ * @param exitOnFailure Whether if writing fails if the program should throw or just warn
+ * @return A std::streambuf* or either an opened file or of std::cout
+ */
+inline std::streambuf* determineOutBuf(std::ofstream & outFile,
+		const std::string & outFilename, const std::string outFileExt,
+		bool overWrite, bool append, bool exitOnFailure) {
+	if (outFilename != "") {
+		openTextFile(outFile, outFilename + outFileExt, overWrite,
+				append, exitOnFailure);
+		return outFile.rdbuf();
+	} else {
+		return std::cout.rdbuf();
+	}
 }
 
 inline int getdir(const std::string& dir,

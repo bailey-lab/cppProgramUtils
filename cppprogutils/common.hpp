@@ -17,12 +17,9 @@
 #include <iostream>
 #include <ostream>
 #include <fstream>
-#include <vector>
 #include <array>
 #include <stdint.h>
-#include <map>
 #include <unordered_set>
-#include <string>
 #include <algorithm>
 #include <random>
 #include <sstream>
@@ -42,7 +39,6 @@ namespace cppprogutils {
 
 typedef std::map<std::string, std::string> MapStrStr;
 typedef std::vector<std::string> VecStr;
-}
 
 namespace estd {
 //  added to std:: stou, stous, stos because they are not in the standard
@@ -72,45 +68,99 @@ inline int16_t stos(const std::string& str, size_t* idx = 0, int base = 10) {
   }
   return static_cast<int16_t>(firstConverion);
 }
-
-
-template<class T>
-struct TypeName
-{
-static std::string get() { return T::typeName(); }
-};
-// add more specializations for the build-in types
-template<>
-inline std::string TypeName<int16_t>::get() {return "int16_t";}
-template<>
-inline std::string TypeName<int32_t>::get() {return "int32_t";}
-template<>
-inline std::string TypeName<int64_t>::get() {return "int64_t";}
-template<>
-inline std::string TypeName<uint16_t>::get() {return "uint16_t";}
-template<>
-inline std::string TypeName<uint32_t>::get() {return "uint32_t";}
-template<>
-inline std::string TypeName<uint64_t>::get() {return "uint64_t";}
-#ifndef __linux__
-template<>
-inline std::string TypeName<size_t>::get() {return "size_t";}
-#endif
-template<>
-inline std::string TypeName<bool>::get() {return "bool";}
-template<>
-inline std::string TypeName<double>::get() {return "double";}
-template<>
-inline std::string TypeName<long double>::get() {return "long double";}
-template<>
-inline std::string TypeName<float>::get() {return "float";}
-template<>
-inline std::string TypeName<std::string>::get() {return "string";}
-
+}  //namepsace estd
+/**@brief Getting type by taking advantage of info available in __PRETTY_FUNCTION__
+ *
+ * @return The type
+ */
 template<typename T>
-inline std::string getTypeName(const T & obj){
-	return TypeName<T>::get();
+std::string typeStr(){
+	std::string pf(__PRETTY_FUNCTION__);
+	auto tEqualPos = pf.rfind("T = ");
+	auto semiColPos = pf.find(";", tEqualPos);
+	auto closeBracPos = pf.rfind("]");
+	if(tEqualPos != std::string::npos &&
+			closeBracPos != std::string::npos &&
+			closeBracPos > tEqualPos){
+		//this is for the difference in gcc and clang output of __PRETTY_FUNCTION__
+		if(semiColPos != std::string::npos){
+			return pf.substr(tEqualPos + 4, semiColPos - 4 - tEqualPos);
+		}else{
+			return pf.substr(tEqualPos + 4, closeBracPos - 4 - tEqualPos);
+		}
+	}else{
+		return "indeterminate";
+	}
+}
+
+/**@brief Getting type of a given object by taking advantage of info available in __PRETTY_FUNCTION__
+ *
+ * @param val The object to get the type of
+ * @return The type
+ */
+template<typename T>
+std::string typeStr(const T & val){
+	return typeStr<T>();
 }
 
 
-}  //namepsace estd
+/**@brief A struct to get a string of what the value of a object is
+ *
+ */
+struct TypeName
+{
+
+	template<typename U>
+	static std::string get(const U & val){
+		return typeStr(val);
+	}
+
+	template<typename U>
+	static std::string get(){
+		return typeStr<U>();
+	}
+
+};
+
+
+// add more specializations for the build-in types
+template<>
+inline std::string TypeName::get<int16_t>() {return "int16_t";}
+template<>
+inline std::string TypeName::get<int32_t>() {return "int32_t";}
+template<>
+inline std::string TypeName::get<int64_t>() {return "int64_t";}
+template<>
+inline std::string TypeName::get<uint16_t>() {return "uint16_t";}
+template<>
+inline std::string TypeName::get<uint32_t>() {return "uint32_t";}
+#ifndef __linux__
+template<>
+inline std::string TypeName::get<uint64_t>() {return "uint64_t";}
+#endif
+template<>
+inline std::string TypeName::get<size_t>() {return "size_t";}
+template<>
+inline std::string TypeName::get<bool>() {return "bool";}
+template<>
+inline std::string TypeName::get<double>() {return "double";}
+template<>
+inline std::string TypeName::get<long double>() {return "long double";}
+template<>
+inline std::string TypeName::get<float>() {return "float";}
+template<>
+inline std::string TypeName::get<std::string>() {return "std::string";}
+
+/**@brief A function to return the type of the obj input in string fomat
+ *
+ * @param obj The obj to get the type info from
+ * @return a string of the object type
+ */
+template<typename T>
+inline std::string getTypeName(const T & obj){
+	return TypeName::get<T>();
+}
+
+
+
+}  //namepsace cppprogutils

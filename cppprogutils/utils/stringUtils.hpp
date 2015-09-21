@@ -9,6 +9,14 @@
 #include "cppprogutils/common.hpp"
 namespace cppprogutils {
 
+inline bool endsWith(const std::string& a, const std::string& b) {
+  // http://stackoverflow.com/a/874160
+  if (a.size() >= b.size()) {
+    return (0 == a.compare(a.size() - b.size(), b.size(), b));
+  }
+  return false;
+}
+
 template <typename T>
 std::string to_string(T obj) {
   std::stringstream ss;
@@ -136,52 +144,34 @@ inline bool strAllDigits(const std::string& str) {
 }
 
 
-inline std::string centerText(const std::string& text, uint32_t maxWidth) {
-  uint32_t halfWay = std::round(maxWidth / 2.0);
-  uint32_t halfText = std::round(text.size() / 2.0);
-  return std::string(halfWay - halfText, ' ') + text;
+template <typename CON, typename FUN>
+std::string longestToString(const CON& con, FUN f){
+    auto t = [&f](const typename CON::value_type & e){ return to_string(f(e)); };
+    auto longest = std::max_element(con.begin(), con.end(), [&t](const typename CON::value_type& a, const typename CON::value_type& b){
+            return t(a).size() < t(b).size();
+        });
+    return t(*longest);
 }
 
-inline std::string boldText(const std::string& title,
-                            const std::string& colorCode) {
-  return "\033[1;" + colorCode + "m" + title + "\033[0m";
+template <typename CON, typename FUN>
+uint32_t paddingWidth(const CON& con, FUN f){
+    return longestToString(con, f).size();
 }
 
-inline std::string boldBlackText(const std::string& title) {
-  return boldText(title, "30");
-}
-inline std::string centerTitle(const std::string& text, uint32_t maxWidth) {
-  return centerText(boldBlackText(text), maxWidth);
-}
-inline std::string addFlashingColor(const std::string& colorCode) {
-  return "\033[38;5;" + colorCode + ";147;5" + "m";
-}
-inline std::string addFlashingColor(uint32_t colorCode) {
-  return addFlashingColor(to_string(colorCode));
-}
-inline std::string addAnsiAtr(const std::string& atr) {
-  return "\033[" + atr + "m";
-}
-inline std::string changeBackground(const std::string& colorCode) {
-  return "\033[48;5;" + colorCode + "m";
-}
-inline std::string changeColor(const std::string& colorCode) {
-  return "\033[38;5;" + colorCode + "m";
-}
-inline std::string changeColor(uint32_t colorCode) {
-  return changeColor(to_string(colorCode));
-}
-inline std::string changeBackground(uint32_t colorCode) {
-  return changeBackground(to_string(colorCode));
+template<typename MAP, typename KEYFUNC, typename VALUEFUNC>
+void compareColPaddings(const MAP& theMap,
+		std::pair<uint32_t, uint32_t> & paddings, KEYFUNC kFunc, VALUEFUNC vFunc) {
+	uint32_t keyMaxLen = paddingWidth(theMap, kFunc);
+	uint32_t valueMaxLen = paddingWidth(theMap, vFunc);
+	if (keyMaxLen > paddings.first) {
+		paddings.first = keyMaxLen;
+	}
+	if (valueMaxLen > paddings.first) {
+		paddings.second = keyMaxLen;
+	}
 }
 
-inline std::string endAllAttributes(const std::string& add = "") {
-  std::string output = "\033[0m";
-  if (add != "") {
-    output.append("\033[" + add + "m");
-  }
-  return output;
-}
+
 
 
 

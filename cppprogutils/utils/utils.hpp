@@ -10,28 +10,85 @@
 
 
 namespace cppprogutils {
+/**@brief Class to hold a pool of system commands with a lock so threads can just pull from this
+ *
+ */
+template<typename T>
+class CmdPool {
+public:
+	/**@brief Construct with a vector of commands to run
+	 *
+	 * @param cmds The vector of commands
+	 */
+	CmdPool(const std::vector<T> & cmds): cmds_(cmds){
 
-/**@b Print out the contents of a map with column adjusted, should only be called on maps of std::string,std::string but templated so
- * different it can be used on multiple map types
+	}
+private:
+	//std::atomic<uint32_t> currentCmd_;
+	std::vector<T> cmds_; /**< The commands to run */
+	uint32_t currentCmd_ = 0; /**< Index of what command to run next */
+
+	std::mutex mut_; /**< Mutex for locking pool while thread is grabbing command */
+public:
+	/**@brief small class to hold whether there is a next class and what it is
+	 *
+	 */
+	struct cmdStatus{
+		T cmd_;
+		bool valid_ ;
+	};
+	/**@brief grab next command to run
+	 *
+	 * @return A struct with whether there is a command to run and a string of what that command is, if invalid string will be blank
+	 */
+	cmdStatus getCmd(){
+		/*
+		auto current = currentCmd_.fetch_add(1);
+		if (currentCmd_ < cmds_.size()) {
+			return {cmds_ [current],true};
+		} else {
+			return {T {},false};
+		}*/
+
+		std::lock_guard<std::mutex> lock(mut_);
+		if(currentCmd_ < cmds_.size()){
+			++currentCmd_;
+			return {cmds_ [currentCmd_ - 1],true};
+		}else{
+			return {T{},false};
+		}
+	}
+};
+
+
+/**@brief Print out the contents of a map with column adjusted, should be a simple key,value map where both the key and value can be converted to strings and
+ * have the output operator << defined
  *
  * @param theMap The map to print
  * @param out The stream to print o
  */
 template <typename MAP>
 void mapOutColAdjust(const MAP& theMap,
-                         std::ostream& out) {
-	uint64_t keyMaxLen = 0;
-	uint64_t valueMaxLen = 0;
+                         std::ostream& out,
+												 const std::string & middleSep = "\t",
+												 uint32_t keyMaxLen = 0,
+												 uint32_t valueMaxLen = 0) {
+	if(0 == keyMaxLen){
+
+		for(const auto & kv : theMap){
+			auto currentKeySize = to_string(kv.first).size();
+			if(keyMaxLen < currentKeySize){
+				keyMaxLen = currentKeySize;
+			}
+			auto currentValSize = to_string(kv.first).size();
+			if(currentValSize > valueMaxLen){
+				valueMaxLen = currentValSize;
+			}
+		}
+	}
+
   for (const auto& mValue : theMap) {
-    if(mValue.first.size() > keyMaxLen){
-    	keyMaxLen = mValue.first.size();
-    }
-    if(mValue.second.size() > valueMaxLen){
-    	valueMaxLen = mValue.second.size();
-    }
-  }
-  for (const auto& mValue : theMap) {
-    out << std::right << std::setw(keyMaxLen) << mValue.first << "     "
+    out << std::right << std::setw(keyMaxLen) << mValue.first << middleSep
     		<< std::left << std::setw(valueMaxLen) << mValue.second << "\n";
   }
 }
@@ -138,6 +195,24 @@ inline void printTableOrganized(const std::vector<VecStr>& content,
     out << std::endl;
   }
 }
+
+
+template <typename C, typename T>
+bool contains(const C& c, const T& t) {
+	return c.find(t) != c.end();
+}
+
+template <typename Container, typename T>
+auto find(Container& c, const T& t) -> decltype(c.begin()) {
+  return std::find(c.begin(), c.end(), t);
+}
+
+template <typename T>
+bool contains(const std::vector<T>& c, const T& t) {
+  return find(c, t) != c.end();
+}
+
+
 
 
 struct scoreMatrixCell {
