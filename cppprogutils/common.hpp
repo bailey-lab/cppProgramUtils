@@ -34,6 +34,7 @@
 #include <sys/stat.h>
 #include <iomanip>
 #include <functional>
+#include <mutex>
 
 namespace cppprogutils {
 
