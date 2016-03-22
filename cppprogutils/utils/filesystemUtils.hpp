@@ -162,7 +162,7 @@ inline std::streambuf* determineOutBuf(std::ofstream & outFile,
 		const std::string & outFilename, const std::string outFileExt,
 		bool overWrite, bool append, bool exitOnFailure) {
 	if (outFilename != "") {
-		openTextFile(outFile, outFilename + outFileExt, overWrite,
+		openTextFile(outFile, outFilename,outFileExt, overWrite,
 				append, exitOnFailure);
 		return outFile.rdbuf();
 	} else {

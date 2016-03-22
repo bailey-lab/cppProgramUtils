@@ -34,6 +34,7 @@
 #include <sys/stat.h>
 #include <iomanip>
 #include <functional>
+#include <mutex>
 
 namespace cppprogutils {
 
@@ -134,7 +135,7 @@ template<>
 inline std::string TypeName::get<uint16_t>() {return "uint16_t";}
 template<>
 inline std::string TypeName::get<uint32_t>() {return "uint32_t";}
-#ifndef __linux__
+#if defined( __APPLE__ ) || defined( __APPLE_CC__ ) || defined( macintosh ) || defined( __MACH__ )
 template<>
 inline std::string TypeName::get<uint64_t>() {return "uint64_t";}
 #endif
